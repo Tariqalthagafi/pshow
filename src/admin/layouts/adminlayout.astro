@@ -1,0 +1,40 @@
+---
+import Sidebar from "@/admin/components/sidebar/sidebar.vue"
+const { title } = Astro.props
+---
+  <head>
+    <meta charset="UTF-8" />
+
+  </head>
+<div class="admin-layout">
+
+  <!-- السايدبار -->
+  <Sidebar />
+
+  <!-- المحتوى الرئيسي -->
+  <main class="content">
+    {title && <h1 class="page-title">{title}</h1>}
+    <slot />
+  </main>
+
+</div>
+
+<style>
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f3f4f6;
+  direction: rtl;
+}
+
+.content {
+  flex: 1;
+  padding: 32px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+</style>
