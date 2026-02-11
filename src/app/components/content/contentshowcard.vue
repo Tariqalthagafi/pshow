@@ -191,4 +191,32 @@ const deleteCard = async (offerId) => {
   align-items: center;
 }
 
+@media (max-width: 600px) {
+
+  /* الشبكة */
+  .cards-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding: 12px !important;
+  }
+
+  /* زر الإضافة */
+  .add-btn {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    border-radius: 10px;
+    gap: 10px;
+  }
+
+  .add-text {
+    font-size: 14px;
+  }
+
+  .premium-tag {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+}
+
 </style>

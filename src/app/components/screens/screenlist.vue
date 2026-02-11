@@ -124,11 +124,21 @@ onMounted(async () => {
 <style>
 .screen-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 20px;
   padding: 20px;
   direction: rtl;
   align-items: start;
 }
+
+/* تحسين الجوال */
+@media (max-width: 600px) {
+  .screen-list {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 12px;
+  }
+}
+
 </style>
 

@@ -149,4 +149,35 @@ const lastSeenText = computed(() => {
   color: #ef4444;
 }
 
+@media (max-width: 600px) {
+
+  .expand-box {
+    padding: 14px;
+    border-radius: 12px;
+    gap: 16px;
+  }
+
+  .section-title {
+    font-size: 14px;
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .label {
+    font-size: 12px;
+  }
+
+  .value {
+    font-size: 13px;
+    max-width: 100%;
+    text-align: right;
+    direction: rtl;
+    word-break: break-word;
+  }
+}
+
 </style>

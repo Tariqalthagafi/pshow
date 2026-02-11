@@ -104,4 +104,39 @@ defineEmits(["edit", "delete"])
 .delete:hover {
   background: #fecaca;
 }
+
+@media (max-width: 600px) {
+
+  .models-list {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .model-box {
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .model-box h3 {
+    font-size: 16px;
+  }
+
+  .model-box p {
+    font-size: 13px;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .actions button,
+  .delete {
+    width: 100%;
+    padding: 8px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
+}
+
 </style>

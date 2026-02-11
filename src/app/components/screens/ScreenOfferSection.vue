@@ -160,4 +160,52 @@ const removeModel = async () => {
   color: #b91c1c;
 }
 
+@media (max-width: 600px) {
+
+  .expand-box {
+    padding: 14px;
+    border-radius: 10px;
+    gap: 12px;
+  }
+
+  /* زر اختيار العرض */
+  .assign-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  /* القائمة المنسدلة */
+  .dropdown {
+    margin-top: 4px;
+    border-radius: 6px;
+  }
+
+  .dropdown-item {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  /* العرض المختار */
+  .selected-model {
+    padding: 6px 8px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  .selected-model .remove {
+    font-size: 14px;
+  }
+
+  /* الرابط */
+  .link-box {
+    padding: 8px 10px;
+  }
+
+  .link-text {
+    font-size: 12px;
+    word-break: break-all;
+  }
+}
+
 </style>

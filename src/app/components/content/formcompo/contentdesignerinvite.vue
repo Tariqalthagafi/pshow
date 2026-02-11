@@ -170,4 +170,50 @@ defineEmits(["update:email", "invite", "cancel"])
   visibility: visible;
   opacity: 1;
 }
+
+@media (max-width: 600px) {
+
+  /* صف الإدخال */
+  .designer-input {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .designer-input input {
+    width: 100%;
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .invite-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+
+  .premium-tag {
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 11px;
+  }
+
+  .label-row label {
+    font-size: 13px;
+  }
+
+  .tooltip-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+  }
+
+  .tooltip-text {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
+
 </style>

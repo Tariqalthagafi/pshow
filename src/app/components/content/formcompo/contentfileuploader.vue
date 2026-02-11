@@ -280,10 +280,45 @@ const onFilesSelected = async (e) => {
   opacity: 1;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
+
+  /* صف العنوان + زر الرفع */
+  .top-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  /* زر الرفع */
   .upload-btn {
-    padding: 8px 12px;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+
+  /* الرسالة */
+  .msg-box {
     font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  /* tooltip */
+  .tooltip-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+  }
+
+  .tooltip-text {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  /* قائمة الملفات */
+  .files-list {
+    gap: 8px;
   }
 }
+
 </style>

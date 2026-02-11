@@ -202,4 +202,54 @@ const unlinkScreen = async () => {
 .unlink-btn:hover {
   background: #fee2e2;
 }
+
+@media (max-width: 600px) {
+
+  .expand-box {
+    padding: 14px;
+    border-radius: 10px;
+    gap: 14px;
+  }
+
+  /* الحالة */
+  .status-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    font-size: 13px;
+  }
+
+  /* الأكواد */
+  .activation-code {
+    font-size: 12px;
+    padding: 6px 8px;
+    white-space: normal; /* مهم جداً للجوال */
+    word-break: break-word;
+  }
+
+  /* زر النسخ */
+  .copy-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  /* الرابط */
+  .link-box {
+    padding: 8px 10px;
+  }
+
+  .link-text {
+    font-size: 12px;
+    word-break: break-all;
+  }
+
+  /* زر فصل الربط */
+  .unlink-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+}
+
 </style>

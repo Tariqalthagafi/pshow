@@ -124,4 +124,36 @@ const confirmDelete = ref(false)
   75% { transform: translateX(-2px); }
   100% { transform: translateX(0); }
 }
+
+@media (max-width: 600px) {
+
+  .actions {
+    justify-content: flex-start;
+  }
+
+  .delete {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
+  .confirm-box {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .confirm-text {
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .yes-btn,
+  .no-btn {
+    width: 100%;
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+
 </style>

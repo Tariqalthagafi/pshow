@@ -69,11 +69,6 @@ defineEmits(["update:effect", "update:duration"])
   gap: 6px;
 }
 
-@media (max-width: 640px) {
-  .top-row {
-    grid-template-columns: 1fr;
-  }
-}
 
 /* القائمة المنسدلة */
 .field.small select {
@@ -145,6 +140,33 @@ defineEmits(["update:effect", "update:duration"])
   width: 80px;
   height: 20px;
   text-align: center;
+}
+
+@media (max-width: 600px) {
+
+  .top-row {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+
+  .field.small select,
+  .field.small input {
+    width: 100%;
+    font-size: 12px;
+    padding: 6px 8px;
+    height: 32px;
+  }
+
+  .tooltip-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+  }
+
+  .tooltip-text {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
 }
 
 </style>

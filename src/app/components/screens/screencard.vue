@@ -328,12 +328,93 @@ input:checked + .slider:before {
   cursor: not-allowed;
 }
 
-@media (max-width: 480px) {
+
+/* إزالة الحدود السوداء عند الضغط */
+.action-btn:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px #c7d2fe !important; /* أزرق فاتح */
+  border-color: #6366f1 !important; /* أزرق بنفسجي */
+}
+
+
+/* تأثير الضغط (Active) */
+.action-btn:active {
+  background: #e0e7ff !important; /* أزرق فاتح جميل */
+  border-color: #6366f1 !important; /* أزرق بنفسجي */
+  color: #1e1b4b !important;
+  transform: scale(0.97);
+}
+
+/* تحسين كامل للجوال */
+@media (max-width: 600px) {
+
   .screen-card {
+    padding: 14px;
+    border-radius: 12px;
+    gap: 12px;
+  }
+
+  .top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .screen-link {
+    font-size: 14px;
+  }
+
+  /* تصغير السويتش */
+  .switch {
+    width: 40px;
+    height: 22px;
+  }
+
+  .slider:before {
+    height: 16px;
+    width: 16px;
+    bottom: 3px;
+    left: 3px;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(18px);
+  }
+
+  /* الأزرار تتحول إلى عمود */
+  .actions-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .action-btn {
     width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  /* أقسام التمدد */
+  .expand-box,
+  .screen-info,
+  .screen-offer,
+  .screen-link-section {
+    margin-top: 10px;
   }
 }
+
+.action-btn:active {
+  background: #f0f0f0 !important;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.08);
+  transform: scale(0.96);
+}
+
+/* تصغير الأزرار داخل الكرت */ 
+.action-btn { padding: 6px 10px !important; font-size: 12px !important; border-radius: 6px !important; } 
+/* تصغير المسافة بين الأزرار */ 
+.actions-row { gap: 6px !important; } 
+/* تصغير الكرت نفسه */ 
+.screen-card { padding: 14px !important; gap: 12px !important; } 
+/* تصغير النص العلوي */ 
+.screen-link { font-size: 14px !important; }
 
 </style>

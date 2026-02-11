@@ -165,4 +165,37 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
 }
+
+@media (max-width: 600px) {
+
+  .content-item {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .preview img,
+  .preview video {
+    width: 50px;
+    height: 50px;
+  }
+
+  .name {
+    font-size: 11px;
+    white-space: normal; /* مهم للجوال */
+  }
+
+  .pill {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .remove-btn {
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+    top: 3px;
+    left: 3px;
+  }
+}
+
 </style>

@@ -129,4 +129,24 @@ const saveFullName = async () => {
   background: #fff;
 }
 
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+  }
+
+  .account-card {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .value,
+  .input {
+    font-size: 14px;
+  }
+}
+
 </style>
