@@ -6,9 +6,10 @@
   <section class="min-h-screen bg-gray-100 flex flex-col items-center py-12 px-6">
 
     <!-- الصندوق الرئيسي -->
-    <div class="bg-white shadow-xl rounded-2xl p-10 w-full max-w-lg text-center mb-12">
-      <ProductDescription  />
-    </div>
+    <div class="w-full max-w-5xl mb-16">
+  <ProductDescription />
+</div>
+
 
     <!-- الباقات -->
     <div class="w-full max-w-4xl mb-12">

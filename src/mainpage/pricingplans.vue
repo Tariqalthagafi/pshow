@@ -1,191 +1,183 @@
 <template>
   <section class="pricing-section">
 
-    <div class="pricing-grid">
+    <div class="single-card">
 
-      <!-- الباقة الأساسية -->
-      <div class="plan-card">
-        <h3 class="plan-title">الباقة الأساسية</h3>
-        <p class="plan-subtitle">مناسبة للتجربة د</p>
-        <p class="plan-price">مجانية</p>
+      <!-- زر شهري / سنوي داخل البطاقة -->
+      <div class="toggle-container">
+        <button
+          :class="['toggle-btn', billingCycle === 'monthly' ? 'active' : '']"
+          @click="billingCycle = 'monthly'"
+        >
+          شهري
+        </button>
 
-        <ul class="plan-features">
-          <li>✔  رفع الصور حتى صورتين</li>
-          <li>✔ عرض شاشة واحدة</li>
-          <li>✔ انشاء عرض واحد فقط </li>
-        </ul>
-
-        <button class="plan-btn">ابدأ الاستخدام</button>
+        <button
+          :class="['toggle-btn', billingCycle === 'yearly' ? 'active' : '']"
+          @click="billingCycle = 'yearly'"
+        >
+          سنوي
+        </button>
       </div>
 
-      <!-- الباقة الاحترافية -->
-      <div class="plan-card featured">
-        <h3 class="plan-title featured-title">الباقة الاحترافية</h3>
-        <p class="plan-subtitle featured-subtitle">الأكثر استخدامًا</p>
-        <p class="plan-price featured-price">650 ريال</p>
-        <p class="plan-price featured-price">سنوي</p>
-        <ul class="plan-features featured-features">
-          <li>✔ بالاضافة الى المجاني</li>
-          <li>✔ رفع الصور والفيديو</li>
-          <li>✔ جدولة المحتوى</li>
-          <li>✔  حتى 5 شاشات</li>
-          <li>✔ انشاء عروض لحد 30 عرض</li>
-          <li>✔ مساحة تخزينية كلاود</li>
-          <li>✔ اولوية الدعم الفني</li>
-        </ul>
+      <div class="plans-wrapper">
 
-        <button class="plan-btn featured-btn">اشترك الان</button>
-      </div>
+        <!-- الباقة الأساسية -->
+        <div class="plan-section">
+          <h3 class="plan-title">الباقة الأساسية</h3>
+          <p class="plan-price">مجانية</p>
 
-      <!-- الباقة المتقدمة -->
-      <div class="plan-card">
-        <h3 class="plan-title">الباقة المتقدمة</h3>
-        <p class="plan-subtitle">للشركات والمنشآت</p>
-        <p class="plan-price"> عرض سعر خاص</p>
+          <ul class="plan-features">
+            <li>✔ رفع الصور حتى صورتين</li>
+            <li>✔ عرض شاشة واحدة</li>
+            <li>✔ إنشاء عرض واحد فقط</li>
+          </ul>
+        </div>
 
-        <ul class="plan-features">
-          <li>✔ عدد غير محدود من الشاشات</li>
-          <li>✔ دعم فني مخصص</li>
-          <li>✔ عروض مخصصة</li>
-        </ul>
+        <!-- خط فاصل -->
+        <div class="divider"></div>
 
-        <button class="plan-btn"> تواصل معنا</button>
+        <!-- الباقة الاحترافية -->
+        <div class="plan-section">
+          <h3 class="plan-title">الباقة الاحترافية</h3>
+
+          <p class="plan-price">
+            {{ billingCycle === 'monthly' ? '70 ريال' : '650 ريال' }}
+          </p>
+
+          <p class="plan-subtitle">
+            {{ billingCycle === 'monthly' ? 'شهري' : 'سنوي' }}
+          </p>
+
+          <ul class="plan-features">
+            <li>✔ كل مميزات الباقة الأساسية</li>
+            <li>✔ رفع الصور والفيديو</li>
+            <li>✔ جدولة المحتوى</li>
+            <li>✔ حتى 5 شاشات</li>
+            <li>✔ إنشاء حتى 30 عرض</li>
+            <li>✔ مساحة تخزينية سحابية</li>
+            <li>✔ أولوية الدعم الفني</li>
+          </ul>
+        </div>
+
       </div>
 
     </div>
+
   </section>
 </template>
 
 <script setup>
-// لاحقاً نضيف props أو dynamic plans
+import { ref } from "vue"
+const billingCycle = ref("monthly")
 </script>
 
 <style>
 /* القسم */
 .pricing-section {
   width: 100%;
-  max-width: 64rem;
-  margin: 4rem auto 0;
+  max-width: 48rem;
+  margin: 4rem auto;
   padding: 0 1.5rem;
 }
 
-/* العنوان */
-.pricing-title {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 2.5rem;
-  color: #111827;
-}
-
-/* الشبكة */
-.pricing-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .pricing-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* بطاقة الباقة */
-.plan-card {
+/* البطاقة */
+.single-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 1rem;
-  padding: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   text-align: center;
-  transition: all .25s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
-.plan-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+/* زر التبديل */
+.toggle-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
-/* الباقة المميزة */
-.featured {
-  background: #1e40af;
+.toggle-btn {
+  padding: .6rem 1.5rem;
+  border-radius: .75rem;
+  border: 1px solid #d1d5db;
+  background: #f3f4f6;
+  cursor: pointer;
+  transition: .2s;
+  font-size: 1rem;
+}
+
+.toggle-btn.active {
+  background: #2563eb;
   color: white;
-  border: 2px solid #1d4ed8;
-  transform: scale(1.05);
+  border-color: #2563eb;
 }
 
-.featured:hover {
-  transform: scale(1.05) translateY(-4px);
+/* محتوى الباقات */
+.plans-wrapper {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.plan-section {
+  flex: 1;
+  text-align: center;
+}
+
+/* الفاصل */
+.divider {
+  width: 1px;
+  background: #e5e7eb;
+  height: 100%;
 }
 
 /* النصوص */
 .plan-title {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: .5rem;
+  color: #111827;
+}
+
+.plan-price {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #2563eb;
 }
 
 .plan-subtitle {
   color: #6b7280;
-  margin-bottom: 1rem;
-}
-
-.plan-price {
-  font-size: 1.75rem;
-  font-weight: 700;
   margin-bottom: 1.5rem;
-}
-
-/* النصوص داخل الباقة المميزة */
-.featured-title,
-.featured-subtitle,
-.featured-price {
-  color: white;
-}
-
-.featured-subtitle {
-  opacity: .8;
 }
 
 /* المميزات */
 .plan-features {
   list-style: none;
   padding: 0;
-  margin-bottom: 1.5rem;
+  margin: 0 auto;
+  max-width: 18rem;
+  text-align: right;
   color: #374151;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: .6rem;
+  font-size: 1.05rem;
 }
 
-.featured-features {
-  color: #e0e7ff;
-}
+/* موبايل */
+@media (max-width: 768px) {
+  .plans-wrapper {
+    flex-direction: column;
+  }
 
-/* زر الباقة */
-.plan-btn {
-  background: #2563eb;
-  color: white;
-  padding: .6rem 1.5rem;
-  border-radius: .75rem;
-  border: none;
-  cursor: pointer;
-  transition: background .2s ease;
-  font-size: .95rem;
-}
-
-.plan-btn:hover {
-  background: #1d4ed8;
-}
-
-/* زر الباقة المميزة */
-.featured-btn {
-  background: white;
-  color: #1e40af;
-}
-
-.featured-btn:hover {
-  background: #f3f4f6;
+  .divider {
+    width: 100%;
+    height: 1px;
+  }
 }
 </style>

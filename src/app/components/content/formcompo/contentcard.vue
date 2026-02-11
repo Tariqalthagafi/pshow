@@ -445,12 +445,13 @@ onMounted(async () => {
 
 /* دعم الجوال */
 @media (max-width: 480px) {
-  .form-box {
-    padding: 14px;
+.form-box {
     max-width: 100%;
+    width: 100%;
   }
+}
 
-  .row-top h2 {
+.row-top h2 {
     font-size: 16px;
   }
 
@@ -462,7 +463,7 @@ onMounted(async () => {
   .section-box {
     padding: 12px;
   }
-}
+
 
 .designer-locked-box {
   display: flex;

@@ -1,76 +1,47 @@
 <template>
-  <div class="description-wrapper">
-    <p class="product-description">
-      تحكّم في كل شاشات منشأتك من مكان واحد.  
-      حمّل المحتوى، رتّب العروض، وجدول التشغيل بسهولة تامة.  
-      اختر الباقة التي تناسب احتياجاتك.
-    </p>
+  <div class="w-full max-w-5xl mx-auto">
 
-    <button class="cta-btn" @click="scrollToPlans">
-      استعرض الباقات
-    </button>
+    <Swiper
+      :modules="[Navigation, Pagination, Autoplay]"
+      :slides-per-view="1"
+      :loop="true"
+      :autoplay="{ delay: 4000 }"
+      navigation
+      pagination
+      class="mySwiper"
+    >
+      <SwiperSlide><Slide1 /></SwiperSlide>
+      <SwiperSlide><Slide2 /></SwiperSlide>
+      <SwiperSlide><Slide3 /></SwiperSlide>
+      <SwiperSlide><Slide4 /></SwiperSlide>
+      <SwiperSlide><Slide5 /></SwiperSlide>
+      <SwiperSlide><Slide6 /></SwiperSlide>
+    </Swiper>
+
   </div>
 </template>
 
 <script setup>
-function scrollToPlans() {
-  const section = document.querySelector("#pricing-section")
-  if (section) {
-    section.scrollIntoView({ behavior: "smooth" })
-  }
-}
+import { Swiper, SwiperSlide } from "swiper/vue"
+import { Navigation, Pagination, Autoplay } from "swiper/modules"
+
+// استيراد CSS الخاص بالمكتبة
+import "swiper/css"
+import "swiper/css/navigation"
+import "swiper/css/pagination"
+
+import Slide1 from "@/mainpage/slider/slide1.vue"
+import Slide2 from "@/mainpage/slider/slide2.vue"
+import Slide3 from "@/mainpage/slider/slide3.vue"
+import Slide4 from "@/mainpage/slider/slide4.vue"
+import Slide5 from "@/mainpage/slider/slide5.vue"
+import Slide6 from "@/mainpage/slider/slide6.vue"
 </script>
 
 <style scoped>
-.description-wrapper {
-  text-align: center;
+.mySwiper {
+  width: 80%;
+  margin: 0 auto;
 }
 
-/* النص */
-.product-description {
-  color: #4b5563;
-  font-size: 1.125rem;
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
-  max-width: 40rem;
-  margin-left: auto;
-  margin-right: auto;
-
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeInUp .6s ease forwards;
-}
-
-/* زر CTA */
-.cta-btn {
-  background: #2563eb;
-  color: white;
-  padding: 0.7rem 1.8rem;
-  border-radius: 0.75rem;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: 0.25s ease;
-  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
-
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeInUp .6s ease forwards;
-  animation-delay: .15s;
-}
-
-.cta-btn:hover {
-  background: #1d4ed8;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
-}
-
-/* حركة الدخول */
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 </style>

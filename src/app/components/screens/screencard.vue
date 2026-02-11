@@ -328,4 +328,12 @@ input:checked + .slider:before {
   cursor: not-allowed;
 }
 
+@media (max-width: 480px) {
+  .screen-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
 </style>

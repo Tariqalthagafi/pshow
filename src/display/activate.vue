@@ -6,11 +6,11 @@
       <h2 class="title">تفعيل الشاشة</h2>
 
       <div class="field">
-        <label>Screen ID</label>
+        <label>رمز الشاشه</label>
         <input
           type="text"
           v-model="screenIdInput"
-          placeholder="أدخل screen_id"
+          placeholder="أدخل رمز الشاشه"
           inputmode="text"
           autocomplete="off"
           autocorrect="off"

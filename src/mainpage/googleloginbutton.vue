@@ -13,7 +13,7 @@ async function loginWithGoogle() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "https://pshow.vercel.app/app/screens"
+      redirectTo: "https://pshow.vercel.app/app/content"
     }
   })
 

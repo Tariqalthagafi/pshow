@@ -10,16 +10,7 @@
 
     <nav class="sidebar-nav">
 
-      <a 
-        href="/app/screens" 
-        class="sidebar-link"
-        :class="{ active: currentPath === '/app/screens' }"
-      >
-        <img class="icon-img" src="/icons/screens.png" />
-        <span class="label" v-if="!collapsed">الشاشات</span>
-      </a>
-
-      <a 
+            <a 
         href="/app/content" 
         class="sidebar-link"
         :class="{ active: currentPath === '/app/content' }"
@@ -29,12 +20,12 @@
       </a>
 
       <a 
-        href="/app/tasks" 
+        href="/app/screens" 
         class="sidebar-link"
-        :class="{ active: currentPath === '/app/tasks' }"
+        :class="{ active: currentPath === '/app/screens' }"
       >
-        <img class="icon-img" src="/icons/tasks.png" />
-        <span class="label" v-if="!collapsed">المهام</span>
+        <img class="icon-img" src="/icons/screens.png" />
+        <span class="label" v-if="!collapsed">الشاشات</span>
       </a>
 
       <a 
@@ -46,6 +37,15 @@
         <span class="label" v-if="!collapsed">العضوية</span>
       </a>
 
+            <a 
+        href="/app/tasks" 
+        class="sidebar-link"
+        :class="{ active: currentPath === '/app/tasks' }"
+      >
+        <img class="icon-img" src="/icons/tasks.png" />
+        <span class="label" v-if="!collapsed">المهام</span>
+      </a>
+      
       <a 
         href="/app/affiliate" 
         class="sidebar-link"
@@ -201,4 +201,15 @@ const logout = async () => {
 .logout-btn:hover {
   background: #b6020b;
 }
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px; /* بدل 240px */
+  }
+
+  .sidebar.collapsed {
+    width: 70px; /* بدل 80px */
+  }
+}
+
 </style>
