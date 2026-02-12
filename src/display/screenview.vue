@@ -1,66 +1,87 @@
 <template>
   <div class="screen" @click="toggleFullscreen">
-    <transition :name="props.effect || 'fade'">
-      <img 
-        :key="currentIndex"
-        :src="props.images[currentIndex]" 
-        class="slide"
-      />
-    </transition>
+
+    <div v-if="!loaded" class="loading-text">جاري تحميل الصور...</div>
+
+    <Splide
+      v-else
+      :key="splideKey"
+      :options="{
+        type: props.effect === 'fade' ? 'fade' : 'loop',
+        autoplay: true,
+        interval: props.duration * 1000,
+        speed: 900,
+        pauseOnHover: false,
+        pauseOnFocus: false,
+        rewind: true,
+        arrows: false,
+        pagination: false,
+      }"
+      class="splide-container"
+    >
+      <SplideSlide v-for="(img, i) in props.images" :key="i">
+        <img :src="img" class="slide" :class="props.effect" />
+      </SplideSlide>
+    </Splide>
+
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from "vue"
+import { Splide, SplideSlide } from "@splidejs/vue-splide"
+import "@splidejs/splide/dist/css/splide.min.css"
 
 const props = defineProps({
-  images: {
-    type: Array,
-    required: true
-  },
-  effect: {
-    type: String,
-    default: "fade"
-  },
-  duration: {
-    type: Number,
-    default: 3000
-  }
+  images: Array,
+  duration: Number,
+  effect: String   // fade / zoom / kenburns
 })
+console.log(props.effect)
 
-const currentIndex = ref(0)
-let interval = null
+const loaded = ref(false)
+const splideKey = ref(0)
 
-function startSlider() {
-  clearInterval(interval)
-
-  interval = setInterval(() => {
-    if (props.images.length > 0) {
-      currentIndex.value = (currentIndex.value + 1) % props.images.length
-    }
-  }, props.duration)
+async function preloadImages(urls) {
+  const promises = urls.map(url => {
+    return new Promise(resolve => {
+      const img = new Image()
+      img.src = url
+      img.onload = resolve
+      img.onerror = resolve
+    })
+  })
+  await Promise.all(promises)
 }
 
-onMounted(() => {
-  startSlider()
+onMounted(async () => {
+  loaded.value = false
+  await preloadImages(props.images)
+  loaded.value = true
+
+  document.documentElement.style.setProperty('--duration', props.duration + 's')
 })
 
-watch(
-  () => [props.images, props.duration, props.effect],
-  () => {
-    currentIndex.value = 0
-    startSlider()
-  },
-  { deep: true }
-)
+watch(() => props.images, async () => {
+  loaded.value = false
+  await preloadImages(props.images)
+  loaded.value = true
+  splideKey.value++
+})
+
+watch(() => props.duration, () => {
+  document.documentElement.style.setProperty('--duration', props.duration + 's')
+  splideKey.value++
+})
+
+watch(() => props.effect, () => {
+  splideKey.value++
+})
 
 function toggleFullscreen() {
   const el = document.documentElement
-  if (!document.fullscreenElement) {
-    el.requestFullscreen()
-  } else {
-    document.exitFullscreen()
-  }
+  if (!document.fullscreenElement) el.requestFullscreen()
+  else document.exitFullscreen()
 }
 </script>
 
@@ -68,205 +89,64 @@ function toggleFullscreen() {
 .screen {
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
   background: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow: hidden;
+}
+
+.loading-text {
+  color: white;
+  font-size: 24px;
+}
+
+.splide-container,
+.splide__slide {
+  width: 100vw;
+  height: 100vh;
 }
 
 .slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
-/* ===========================
-   1) Fade
-=========================== */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.8s ease;
-}
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
+/* ---------------------- */
+/* تأثير Fade             */
+/* ---------------------- */
+.fade {
+  animation: fadeEffect 1s ease-in-out;
 }
 
-/* ===========================
-   2) slide-left
-=========================== */
-.slide-left-enter-active, .slide-left-leave-active {
-  transition: transform 0.8s ease;
-}
-.slide-left-enter-from {
-  transform: translateX(100%);
-}
-.slide-left-leave-to {
-  transform: translateX(-100%);
+@keyframes fadeEffect {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* ===========================
-   3) slide-right
-=========================== */
-.slide-right-enter-active, .slide-right-leave-active {
-  transition: transform 0.8s ease;
-}
-.slide-right-enter-from {
-  transform: translateX(-100%);
-}
-.slide-right-leave-to {
-  transform: translateX(100%);
+/* ---------------------- */
+/* تأثير Zoom             */
+/* ---------------------- */
+.zoom {
+  animation: zoomEffect var(--duration) ease-in-out infinite;
 }
 
-/* ===========================
-   4) slide-up
-=========================== */
-.slide-up-enter-active, .slide-up-leave-active {
-  transition: transform 0.8s ease;
-}
-.slide-up-enter-from {
-  transform: translateY(100%);
-}
-.slide-up-leave-to {
-  transform: translateY(-100%);
+@keyframes zoomEffect {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
 }
 
-/* ===========================
-   5) slide-down
-=========================== */
-.slide-down-enter-active, .slide-down-leave-active {
-  transition: transform 0.8s ease;
-}
-.slide-down-enter-from {
-  transform: translateY(-100%);
-}
-.slide-down-leave-to {
-  transform: translateY(100%);
+/* ---------------------- */
+/* تأثير Ken Burns        */
+/* ---------------------- */
+.kenburns {
+  animation: kenburnsEffect var(--duration) ease-in-out infinite;
 }
 
-/* ===========================
-   6) zoom-in
-=========================== */
-.zoom-in-enter-active, .zoom-in-leave-active {
-  transition: transform 0.8s ease, opacity 0.8s ease;
-}
-.zoom-in-enter-from {
-  transform: scale(1.2);
-  opacity: 0;
-}
-.zoom-in-leave-to {
-  transform: scale(0.8);
-  opacity: 0;
-}
-
-/* ===========================
-   7) zoom-out
-=========================== */
-.zoom-out-enter-active, .zoom-out-leave-active {
-  transition: transform 0.8s ease, opacity 0.8s ease;
-}
-.zoom-out-enter-from {
-  transform: scale(0.8);
-  opacity: 0;
-}
-.zoom-out-leave-to {
-  transform: scale(1.2);
-  opacity: 0;
-}
-
-/* ===========================
-   8) zoom-fade
-=========================== */
-.zoom-fade-enter-active, .zoom-fade-leave-active {
-  transition: transform 0.9s ease, opacity 0.9s ease;
-}
-.zoom-fade-enter-from {
-  transform: scale(1.15);
-  opacity: 0;
-}
-.zoom-fade-leave-to {
-  transform: scale(0.85);
-  opacity: 0;
-}
-
-/* ===========================
-   9) flip-h
-=========================== */
-.flip-h-enter-active, .flip-h-leave-active {
-  transition: transform 0.8s ease, opacity 0.8s ease;
-  transform-style: preserve-3d;
-}
-.flip-h-enter-from {
-  transform: rotateY(90deg);
-  opacity: 0;
-}
-.flip-h-leave-to {
-  transform: rotateY(-90deg);
-  opacity: 0;
-}
-
-/* ===========================
-   10) flip-v
-=========================== */
-.flip-v-enter-active, .flip-v-leave-active {
-  transition: transform 0.8s ease, opacity 0.8s ease;
-  transform-style: preserve-3d;
-}
-.flip-v-enter-from {
-  transform: rotateX(90deg);
-  opacity: 0;
-}
-.flip-v-leave-to {
-  transform: rotateX(-90deg);
-  opacity: 0;
-}
-
-/* ===========================
-   11) rotate
-=========================== */
-.rotate-enter-active, .rotate-leave-active {
-  transition: transform 0.8s ease, opacity 0.8s ease;
-}
-.rotate-enter-from {
-  transform: rotate(-15deg);
-  opacity: 0;
-}
-.rotate-leave-to {
-  transform: rotate(15deg);
-  opacity: 0;
-}
-
-/* ===========================
-   12) kenburns
-=========================== */
-.kenburns-enter-active {
-  animation: kenburns-in 6s ease forwards;
-}
-.kenburns-leave-active {
-  animation: kenburns-out 6s ease forwards;
-}
-
-@keyframes kenburns-in {
-  0% {
-    transform: scale(1.2) translate(20px, 20px);
-    opacity: 0;
-  }
-  100% {
+@keyframes kenburnsEffect {
+  from {
     transform: scale(1) translate(0, 0);
-    opacity: 1;
   }
-}
-
-@keyframes kenburns-out {
-  0% {
-    transform: scale(1) translate(0, 0);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.2) translate(-20px, -20px);
-    opacity: 0;
+  to {
+    transform: scale(1.15) translate(-20px, -20px);
   }
 }
 </style>

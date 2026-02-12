@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@splidejs/splide": "^4.1.4",
+    "@splidejs/vue-splide": "^0.6.12",
     "@supabase/supabase-js": "^2.93.3",
     "swiper": "^12.1.0",
     "vue": "^3.5.24",

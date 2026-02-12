@@ -15,18 +15,10 @@
   @change="$emit('update:effect', $event.target.value)"
 >
   <option value="fade">تلاشي (Fade)</option>
-  <option value="slide-left">انزلاق من اليمين</option>
-  <option value="slide-right">انزلاق من اليسار</option>
-  <option value="slide-up">انزلاق من الأسفل</option>
-  <option value="slide-down">انزلاق من الأعلى</option>
-  <option value="zoom-in">تكبير (Zoom In)</option>
-  <option value="zoom-out">تصغير (Zoom Out)</option>
-  <option value="zoom-fade">تكبير + تلاشي</option>
-  <option value="flip-h">قلب أفقي (Flip Horizontal)</option>
-  <option value="flip-v">قلب عمودي (Flip Vertical)</option>
-  <option value="rotate">دوران خفيف</option>
+  <option value="zoom">تكبير بسيط (Zoom)</option>
   <option value="kenburns">كين بيرنز (احترافي)</option>
 </select>
+
 
     </div>
 <div class="field small">

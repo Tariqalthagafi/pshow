@@ -3,8 +3,9 @@
 
     <ScreenView 
   v-if="ready" 
+  :key="`${duration}-${effect}`"
   :images="images" 
-  :effect="effect" 
+  :effect="effect"
   :duration="duration" 
 />
 
@@ -30,8 +31,13 @@ const ready = ref(false)
 const noOffer = ref(false)
 const waiting = ref(false)
 const images = ref([])
+const effect = ref(null)
+console.log(effect.value + " القيمة الأولية")
+const duration = ref(10) // قيمة افتراضية 3 ثواني
+
 
 onMounted(async () => {
+  
   const screenUUID = localStorage.getItem("active_screen_id")
 
   if (!screenUUID) {
@@ -109,18 +115,33 @@ const shortId = activation.screen_id
 })
 
 async function loadImages(offerId) {
-  const { data, error } = await supabase
+
+  // 1) استعلام الصور من offer_items
+  const { data: items, error: itemsError } = await supabase
     .from("offer_items")
-    .select("secure_url, effect, duration")
+    .select("secure_url")
     .eq("offer_id", offerId)
     .order("order_index", { ascending: true })
 
-  if (!error && data?.length) {
-    images.value = data.map(img => img.secure_url)
+  // 2) استعلام مدة العرض من جدول offers
+  const { data: offerData, error: offerError } = await supabase
+    .from("offers")
+    .select("duration, effect")
+    .eq("id", offerId)
+    .single()
+console.log("مدة العرض الآن:", offerData?.effect)
 
-    // حفظ التأثير والمدة من أول عنصر
-    effect.value = data[0].effect || "fade"      // قيمة افتراضية
-    duration.value = data[0].duration || 3000    // قيمة افتراضية
+  if (!itemsError && items?.length) {
+    images.value = items.map(img => img.secure_url)
+
+    console.log("قبل التغيير:", effect.value)
+effect.value = offerData?.effect || "fade"
+console.log("بعد التغيير:", effect.value)
+
+
+
+    // هنا القيمة الصحيحة 100٪
+    duration.value = Number(offerData?.duration) || 10
 
     ready.value = true
     noOffer.value = false
@@ -132,8 +153,7 @@ async function loadImages(offerId) {
 }
 
 
-const effect = ref(null)
-const duration = ref(3000) // قيمة افتراضية 3 ثواني
+
 
 </script>
 
