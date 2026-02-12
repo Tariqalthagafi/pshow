@@ -71,7 +71,7 @@ onMounted(async () => {
 
 /* نص الحالة */
 const statusText = computed(() => {
-  return isLinked.value ? "مرتبطة" : "غير مرتبطة"
+  return isLinked.value ? "تم الربط" : "لا يوجد ربط"
 })
 
 /* لون الحالة */
@@ -113,15 +113,18 @@ const unlinkScreen = async () => {
 
 <style scoped>
 .expand-box {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  padding: 16px;
-  border-radius: 12px;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+
   display: flex;
   flex-direction: column;
   gap: 16px;
   direction: rtl;
 }
+
 
 .status-row {
   display: flex;

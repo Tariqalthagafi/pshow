@@ -1,7 +1,12 @@
 <template>
   <div class="display-container">
 
-    <ScreenView v-if="ready" :images="images" />
+    <ScreenView 
+  v-if="ready" 
+  :images="images" 
+  :effect="effect" 
+  :duration="duration" 
+/>
 
 <p v-else-if="waiting" class="waiting"> الشاشة في وضع الانتظار… يرجى تفعيلها من لوحة التحكم </p>
 
@@ -106,12 +111,17 @@ const shortId = activation.screen_id
 async function loadImages(offerId) {
   const { data, error } = await supabase
     .from("offer_items")
-    .select("secure_url")
+    .select("secure_url, effect, duration")
     .eq("offer_id", offerId)
     .order("order_index", { ascending: true })
 
   if (!error && data?.length) {
     images.value = data.map(img => img.secure_url)
+
+    // حفظ التأثير والمدة من أول عنصر
+    effect.value = data[0].effect || "fade"      // قيمة افتراضية
+    duration.value = data[0].duration || 3000    // قيمة افتراضية
+
     ready.value = true
     noOffer.value = false
     waiting.value = false
@@ -120,6 +130,11 @@ async function loadImages(offerId) {
     noOffer.value = true
   }
 }
+
+
+const effect = ref(null)
+const duration = ref(3000) // قيمة افتراضية 3 ثواني
+
 </script>
 
 <style scoped>

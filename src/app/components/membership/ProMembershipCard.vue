@@ -5,20 +5,64 @@
     <div class="badge">الأكثر طلبًا</div>
 
     <!-- بطاقة Pro -->
-    <div class="pro-card" @click="$emit('select')">
+    <div class="pro-card">
 
-      <h2 class="title">خطة Pro</h2>
-      <p class="subtitle">كل ما تحتاجه لإدارة عروضك باحتراف</p>
+      <!-- حالة المستخدم -->
+      <p class="status">
+        الباقة الحالية:
+        <span :class="isActive ? 'pro' : 'free'">
+          {{ isActive ? 'مدفوعة (Pro)' : 'مجانية' }}
+        </span>
+      </p>
 
+      <!-- اختيار شهري / سنوي -->
+      <div class="billing-toggle">
+        <button 
+          :class="{ active: billing === 'monthly' }"
+          @click="billing = 'monthly'"
+        >
+          شهري
+        </button>
+
+        <button 
+          :class="{ active: billing === 'yearly' }"
+          @click="billing = 'yearly'"
+        >
+          سنوي – وفر 20%
+        </button>
+      </div>
+
+      <!-- السعر -->
+      <p class="price">
+        {{ billing === 'monthly' ? '39 ريال / شهر' : '299 ريال / سنة' }}
+      </p>
+
+      <!-- زر الترقية -->
+      <button class="upgrade-btn" @click.stop="$emit('subscribe', billing)">
+  خطة Pro — الترقية الآن
+</button>
+<button 
+  v-if="isActive"
+  class="cancel-btn"
+  @click.stop="$emit('cancel')"
+>
+  العودة للخطة المجانية
+</button>
+
+
+      <!-- الوصف -->
+      <p class="subtitle">احصل على مزايا الترقيه </p>
+
+      <!-- المزايا -->
       <ul class="features">
         <li>
           <span class="icon">✔</span>
-          عروض أكثر بدون حدود تقريبًا
+          عروض أكثر حتى 10 عروض
         </li>
 
         <li>
           <span class="icon">✔</span>
-          حتى 5 شاشات بدلاً من شاشة واحدة
+           5 شاشات بدلاً من شاشة واحدة
         </li>
 
         <li>
@@ -27,20 +71,43 @@
         </li>
       </ul>
 
-      <button class="upgrade-btn">
-        ابدأ الترقية الآن
-      </button>
-
     </div>
 
   </div>
 </template>
 
 <script setup>
-defineEmits(["select"])
+import { ref } from "vue"
+
+defineProps({
+  isActive: Boolean
+})
+
+defineEmits(["select", "subscribe", "cancel"])
+
+
+
+const billing = ref("monthly")
 </script>
 
 <style scoped>
+/* الحالة */
+.status {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #e5e7eb;
+}
+
+.status .free {
+  color: #fca5a5;
+  font-weight: 700;
+}
+
+.status .pro {
+  color: #6ee7b7;
+  font-weight: 700;
+}
+
 /* الحاوية العامة */
 .pro-wrapper {
   width: 100%;
@@ -64,9 +131,9 @@ defineEmits(["select"])
   z-index: 10;
 }
 
-/* بطاقة Pro */
+/* بطاقة Pro — التصميم القديم */
 .pro-card {
-  width: 100%;
+  width: 98%;
   padding: 26px 20px;
   border-radius: 18px;
   background: linear-gradient(135deg, #3b82f6, #7c3aed);
@@ -80,11 +147,35 @@ defineEmits(["select"])
   transform: translateY(-4px);
 }
 
-/* العنوان */
-.title {
-  font-size: 24px;
+/* اختيار شهري / سنوي */
+.billing-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.billing-toggle button {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.25);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+  font-size: 13px;
+}
+
+.billing-toggle button.active {
+  background: white;
+  color: #1f2937;
+}
+
+/* السعر */
+.price {
+  font-size: 20px;
   font-weight: 800;
-  margin-bottom: 6px;
+  margin-bottom: 14px;
 }
 
 /* الوصف */
@@ -119,7 +210,8 @@ defineEmits(["select"])
 
 /* زر الترقية */
 .upgrade-btn {
-  width: 100%;
+  width: auto; 
+  display: inline-block;
   padding: 14px;
   border-radius: 12px;
   border: none;
@@ -129,9 +221,35 @@ defineEmits(["select"])
   font-weight: 700;
   cursor: pointer;
   transition: 0.25s ease;
+  margin-bottom: 14px;
 }
 
 .upgrade-btn:hover {
   background: #f3f4f6;
 }
+
+@media (max-width: 600px) {
+  .pro-card {
+    padding: 18px 14px;
+  }
+
+  .price {
+    font-size: 18px;
+  }
+
+  .upgrade-btn {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  .billing-toggle button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .features li {
+    font-size: 13px;
+  }
+}
+
 </style>

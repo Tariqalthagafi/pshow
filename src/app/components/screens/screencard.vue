@@ -36,17 +36,30 @@
     <!-- الصف الثاني: ربط الشاشة + ربط العرض + معلومات -->
     <div class="actions-row">
 
-      <button class="action-btn" :disabled="locked" @click="!locked && openAndToggle('screen')">
-        ربط الشاشة
-      </button>
+      <button 
+  class="action-btn"
+  :class="{ active: showScreenLink }"
+  @click="openAndToggle('screen')"
+>
+  رابط الشاشة
+</button>
 
-      <button class="action-btn" :disabled="locked" @click="!locked && openAndToggle('offer')">
-        ربط العرض
-      </button>
+<button 
+  class="action-btn"
+  :class="{ active: showOfferLink }"
+  @click="openAndToggle('offer')"
+>
+  العروض
+</button>
 
-      <button class="action-btn" :disabled="locked" @click="!locked && openAndToggle('info')">
-        معلومات الشاشة
-      </button>
+<button 
+  class="action-btn"
+  :class="{ active: showInfo }"
+  @click="openAndToggle('info')"
+>
+  معلومات الشاشة
+</button>
+
 
     </div>
 
@@ -185,20 +198,26 @@ const toggleBroadcast = async () => {
 }
 </script>
 
-<style>
+<style scoped>
+
+/* ===========================
+   بطاقة الشاشة (نفس ستايل العروض)
+=========================== */
 .screen-card {
   background: #ffffff;
   padding: 18px;
   border-radius: 14px;
-  border: 1px solid #d1d5db; /* رمادي أنعم */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   direction: rtl;
 }
 
-/* الصف العلوي */
+/* ===========================
+   الصف العلوي
+=========================== */
 .top {
   display: flex;
   justify-content: space-between;
@@ -207,214 +226,103 @@ const toggleBroadcast = async () => {
 
 .screen-link {
   font-size: 16px;
-  font-weight: 600;
-  color: #111; /* أسود */
-  text-decoration: none;
+  font-weight: 700;
+  color: #111;
 }
 
-/* صف الأزرار */
+/* ===========================
+   أزرار التمدد (Tabs)
+=========================== */
 .actions-row {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
-/* زر أبيض + حدود رمادية */
 .action-btn {
   flex: 1;
-  background: #ffffff;
-  color: #111;
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: 8px 0;
+  border-radius: 10px;
   border: 1px solid #d1d5db;
+  background: #f9fafb;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;   /* ← أصغر وأجمل */
   font-weight: 600;
-  transition: 0.2s ease;
+  transition: 0.25s ease;
 }
+
 
 .action-btn:hover {
-  background: #f3f4f6;
+  background: #eef2ff;
 }
 
-/* سويتش التفعيل */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 48px;
-  height: 26px;
+.action-btn.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
 }
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #d1d5db;
-  transition: .4s;
-  border-radius: 26px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #4ade80; /* أخضر */
-}
-
-input:checked + .slider:before {
-  transform: translateX(22px);
-}
-
-/* صندوق التمدد */
+/* ===========================
+   صندوق الأقسام المتمددة
+=========================== */
 .expand-box {
-  background: #f9fafb;
+  margin-top: 6px;
+  padding: 14px;
+  background: #f8fafc;
+  border-radius: 12px;
   border: 1px solid #e5e7eb;
-  padding: 12px;
-  border-radius: 10px;
 }
 
-.screen-card.locked {
-  opacity: 0.6;
-  position: relative;
-  pointer-events: none;
+/* ===========================
+   أنيميشن التمدد
+=========================== */
+.expand-enter-active,
+.expand-leave-active {
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+  overflow: hidden;
 }
 
-.lock-overlay {
-  position: absolute;
-  top: -10px;
-  left: 0;
-  right: 0;
-  height: 28px;
-  background: rgba(255, 255, 255, 0.85);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-  font-weight: 700;
-  color: #b45309; /* نفس لون تاق العضوية بريميوم */
-  border-radius: 10px 10px 0 0;
-  pointer-events: none;
-  border: 1px solid #facc15;
-  border-bottom: none;
+.expand-enter-from,
+.expand-leave-to {
+  max-height: 0;
+  opacity: 0;
 }
 
-.premium-text {
-  background: #facc15;
-  padding: 3px 10px;
-  border-radius: 6px;
-  color: #1f2937;
+.expand-enter-to,
+.expand-leave-from {
+  max-height: 600px;
+  opacity: 1;
 }
 
-
-.locked-text {
-  color: #9ca3af;
-  cursor: not-allowed;
-}
-
-
-/* إزالة الحدود السوداء عند الضغط */
-.action-btn:focus {
-  outline: none !important;
-  box-shadow: 0 0 0 2px #c7d2fe !important; /* أزرق فاتح */
-  border-color: #6366f1 !important; /* أزرق بنفسجي */
-}
-
-
-/* تأثير الضغط (Active) */
-.action-btn:active {
-  background: #e0e7ff !important; /* أزرق فاتح جميل */
-  border-color: #6366f1 !important; /* أزرق بنفسجي */
-  color: #1e1b4b !important;
-  transform: scale(0.97);
-}
-
-/* تحسين كامل للجوال */
+/* =========================== السويتش (نفس التصميم القديم) =========================== */ 
+.switch { position: relative; width: 48px; height: 26px; display: inline-block; } 
+.switch input { opacity: 0; width: 0; height: 0; } 
+.slider { position: absolute; inset: 0; background-color: #d1d5db; border-radius: 26px; transition: .4s; cursor: pointer; } 
+.slider:before { content: ""; position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #ffffff; border-radius: 50%; transition: .4s; } input:checked + .slider { background-color: #4ade80; /* أخضر */ } input:checked + .slider:before { transform: translateX(22px); }
+/* ===========================
+   الجوال
+=========================== */
 @media (max-width: 600px) {
-
   .screen-card {
     padding: 14px;
     border-radius: 12px;
-    gap: 12px;
-  }
-
-  .top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
   }
 
   .screen-link {
     font-size: 14px;
   }
 
-  /* تصغير السويتش */
-  .switch {
-    width: 40px;
-    height: 22px;
-  }
-
-  .slider:before {
-    height: 16px;
-    width: 16px;
-    bottom: 3px;
-    left: 3px;
-  }
-
-  input:checked + .slider:before {
-    transform: translateX(18px);
-  }
-
-  /* الأزرار تتحول إلى عمود */
-  .actions-row {
-    flex-direction: column;
-    gap: 8px;
-  }
-
   .action-btn {
-    width: 100%;
-    font-size: 12px;
-    padding: 8px;
+    font-size: 10px;
+    padding: 8px 0;
   }
 
-  /* أقسام التمدد */
-  .expand-box,
-  .screen-info,
-  .screen-offer,
-  .screen-link-section {
-    margin-top: 10px;
+  .expand-box {
+    padding: 12px;
   }
+  .switch { width: 40px; height: 22px; } .slider:before { width: 16px; height: 16px; } input:checked + .slider:before { transform: translateX(18px); }
 }
-
-.action-btn:active {
-  background: #f0f0f0 !important;
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.08);
-  transform: scale(0.96);
-}
-
-/* تصغير الأزرار داخل الكرت */ 
-.action-btn { padding: 6px 10px !important; font-size: 12px !important; border-radius: 6px !important; } 
-/* تصغير المسافة بين الأزرار */ 
-.actions-row { gap: 6px !important; } 
-/* تصغير الكرت نفسه */ 
-.screen-card { padding: 14px !important; gap: 12px !important; } 
-/* تصغير النص العلوي */ 
-.screen-link { font-size: 14px !important; }
 
 </style>
+
+

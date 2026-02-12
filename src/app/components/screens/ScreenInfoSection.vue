@@ -1,5 +1,5 @@
 <template>
-  <div class="expand-box">
+  <div class="info-box">
 
     <!-- القسم الأول: حالة الشاشة -->
     <div class="section">
@@ -83,17 +83,19 @@ const lastSeenText = computed(() => {
 
 
 <style scoped>
-.expand-box {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  padding: 18px;
-  border-radius: 14px;
+.info-box {
+  background: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+
   display: flex;
   flex-direction: column;
   gap: 22px;
   direction: rtl;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
+
 
 /* كل قسم */
 .section {
@@ -151,11 +153,7 @@ const lastSeenText = computed(() => {
 
 @media (max-width: 600px) {
 
-  .expand-box {
-    padding: 14px;
-    border-radius: 12px;
-    gap: 16px;
-  }
+.expand-box { background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; border-radius: 0 !important; gap: 16px; }
 
   .section-title {
     font-size: 14px;
@@ -178,6 +176,13 @@ const lastSeenText = computed(() => {
     direction: rtl;
     word-break: break-word;
   }
+}
+:deep(.expand-box) {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 </style>

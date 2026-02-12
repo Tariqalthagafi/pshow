@@ -86,10 +86,10 @@ const saveFullName = async () => {
   direction: rtl;
   box-shadow: 0 4px 12px rgba(0,0,0,0.04);
 
-  max-width: 600px;   /* يمنع التمدد تحت السايدبار */
-  width: 100%;
+  width: 96%;     /* ← هذا اللي يخليها تاخذ عرض الشاشة */
   margin-left: auto;
 }
+
 
 .title {
   font-size: 22px;
@@ -104,10 +104,7 @@ const saveFullName = async () => {
   gap: 18px 24px;
 }
 
-.item {
-  display: flex;
-  flex-direction: column;
-}
+.item { width: 100%; max-width: 100%; }
 
 .label {
   color: #6b7280;
@@ -127,6 +124,9 @@ const saveFullName = async () => {
   border-radius: 10px;
   font-size: 14px;
   background: #fff;
+  width: 100%; 
+  max-width: 100%; 
+  box-sizing: border-box;
 }
 
 @media (max-width: 600px) {
@@ -144,9 +144,7 @@ const saveFullName = async () => {
   }
 
   .value,
-  .input {
-    font-size: 14px;
-  }
+  .input { font-size: 13px; padding: 8px 10px; }
 }
 
 </style>

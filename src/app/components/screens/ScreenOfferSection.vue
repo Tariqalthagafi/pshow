@@ -1,5 +1,5 @@
 <template>
-  <div class="expand-box">
+  <div class="info-box">
 
     <!-- إذا لم يتم اختيار عرض -->
     <div v-if="!screen.offer_id" class="assign-wrapper">
@@ -81,16 +81,20 @@ const removeModel = async () => {
 </script>
 
 <style scoped>
-.expand-box {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  padding: 16px;
-  border-radius: 12px;
+.info-box {
+  background: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 22px;
   direction: rtl;
 }
+
+
 
 /* زر اختيار العرض */
 .assign-btn {
