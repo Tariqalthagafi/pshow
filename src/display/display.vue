@@ -32,12 +32,9 @@ const noOffer = ref(false)
 const waiting = ref(false)
 const images = ref([])
 const effect = ref(null)
-console.log(effect.value + " القيمة الأولية")
-const duration = ref(10) // قيمة افتراضية 3 ثواني
-
+const duration = ref(10)
 
 onMounted(async () => {
-  
   const screenUUID = localStorage.getItem("active_screen_id")
 
   if (!screenUUID) {
@@ -45,42 +42,36 @@ onMounted(async () => {
     return
   }
 
+  // قراءة حالة الشاشة من screen_activation
   const { data: activation, error: activationError } = await supabase
-  .from("screen_activation")
-  .select("screen_id, is_active")
-  .eq("id", screenUUID)
-  .single()
-
-if (activationError || !activation) {
-  window.location.href = "/activate"
-  return
-}
-
-// إذا الشاشة غير مفعّلة → وضع الانتظار
-if (!activation.is_active) {
-  waiting.value = true
-  return
-}
-
-const shortId = activation.screen_id
- // الرقم القصير
-
-  const { data: screenData, error: screenError } = await supabase
-    .from("screens")
-    .select("offer_id")
-    .eq("screen_id", shortId)           // البحث بالرقم القصير
+    .from("screen_activation")
+    .select("screen_id, is_active, offer_id")
+    .eq("id", screenUUID)
     .single()
 
-  if (screenError || !screenData || !screenData.offer_id) {
+  if (activationError || !activation) {
+    window.location.href = "/activate"
+    return
+  }
+
+  // إذا الشاشة غير مفعّلة → وضع الانتظار
+  if (!activation.is_active) {
+    waiting.value = true
+    return
+  }
+
+  // قراءة العرض من screen_activation مباشرة
+  const offerId = activation.offer_id
+
+  if (!offerId) {
     noOffer.value = true
     return
   }
 
-  const offerId = screenData.offer_id
-
   await loadImages(offerId)
   ready.value = true
 
+  // الاشتراك في تحديثات حالة الشاشة
   supabase
     .channel(`activation_${screenUUID}`)
     .on(
@@ -91,12 +82,16 @@ const shortId = activation.screen_id
         table: "screen_activation",
         filter: `id=eq.${screenUUID}`
       },
-      async () => {
-        await loadImages(offerId)
+      async (payload) => {
+        const newOffer = payload.new.offer_id
+        if (newOffer) {
+          await loadImages(newOffer)
+        }
       }
     )
     .subscribe()
 
+  // الاشتراك في تحديثات عناصر العرض
   supabase
     .channel(`offer_${offerId}`)
     .on(
@@ -115,32 +110,24 @@ const shortId = activation.screen_id
 })
 
 async function loadImages(offerId) {
-
-  // 1) استعلام الصور من offer_items
+  // 1) استعلام الصور
   const { data: items, error: itemsError } = await supabase
     .from("offer_items")
     .select("secure_url")
     .eq("offer_id", offerId)
     .order("order_index", { ascending: true })
 
-  // 2) استعلام مدة العرض من جدول offers
+  // 2) استعلام مدة العرض والتأثير
   const { data: offerData, error: offerError } = await supabase
     .from("offers")
     .select("duration, effect")
     .eq("id", offerId)
     .single()
-console.log("مدة العرض الآن:", offerData?.effect)
 
   if (!itemsError && items?.length) {
     images.value = items.map(img => img.secure_url)
 
-    console.log("قبل التغيير:", effect.value)
-effect.value = offerData?.effect || "fade"
-console.log("بعد التغيير:", effect.value)
-
-
-
-    // هنا القيمة الصحيحة 100٪
+    effect.value = offerData?.effect || "fade"
     duration.value = Number(offerData?.duration) || 10
 
     ready.value = true
@@ -151,11 +138,8 @@ console.log("بعد التغيير:", effect.value)
     noOffer.value = true
   }
 }
-
-
-
-
 </script>
+
 
 <style scoped>
 .display-container {

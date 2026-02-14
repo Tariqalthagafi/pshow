@@ -51,7 +51,7 @@ const errorMessage = ref("")
 async function activateScreen() {
   errorMessage.value = ""
 
-  const shortId = String(screenIdInput.value).trim()   // الرقم القصير
+  const shortId = String(screenIdInput.value).trim()
   const code = String(activationCode.value).trim()
 
   if (!shortId || !code) {
@@ -59,10 +59,10 @@ async function activateScreen() {
     return
   }
 
-  // البحث بالرقم القصير
+  // البحث الآن في screen_activation وليس screens
   const { data, error } = await supabase
-    .from("screens")
-    .select("id, activation_code")   // id = UUID
+    .from("screen_activation")
+    .select("id, activation_code")
     .eq("screen_id", shortId)
     .single()
 
@@ -76,31 +76,25 @@ async function activateScreen() {
     return
   }
 
-  const realScreenId = data.id   // UUID الحقيقي
+  const realScreenId = data.id
   localStorage.setItem("active_screen_id", realScreenId)
 
   const fingerprint = await createFingerprint()
   localStorage.setItem("device_fingerprint", fingerprint)
 
-  const deviceInfo = {
-    id: realScreenId,              // UUID ← الآن في عمود id
-    screen_id: Number(shortId),    // الرقم القصير ← الآن في عمود screen_id
-    user_id: null,
-    device_id: fingerprint,
-    resolution: `${screen.width}x${screen.height}`,
-    orientation: screen.width > screen.height ? "landscape" : "portrait",
-    app_version: "1.0.0",
-    os_version: navigator.userAgent,
-    ip_address: null,
-    last_seen: new Date().toISOString()
-  }
-
+  // تحديث فقط — بدون إنشاء صف جديد
   const { error: activationError } = await supabase
     .from("screen_activation")
-    .upsert(deviceInfo, {
-      onConflict: "id",        // UUID هو المفتاح الآن
-      returning: "minimal"
+    .update({
+      device_id: fingerprint,
+      resolution: `${screen.width}x${screen.height}`,
+      orientation: screen.width > screen.height ? "landscape" : "portrait",
+      app_version: "1.0.0",
+      os_version: navigator.userAgent,
+      ip_address: null,
+      last_seen: new Date().toISOString()
     })
+    .eq("id", realScreenId)
 
   if (activationError) {
     console.log("SUPABASE ERROR:", JSON.stringify(activationError, null, 2))
@@ -125,6 +119,8 @@ async function createFingerprint() {
     .join("")
 }
 </script>
+
+
 
 <style scoped>
 .activate-container {

@@ -213,20 +213,7 @@ const saveCard = async () => {
   alert("تم حفظ بطاقة العرض")
 }
 
-const sendRegistrationInvite = async (email) => {
-  await fetch(
-    "https://eypmuxcspmyizigzapsy.supabase.co/functions/v1/send-registration-invite",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email })
-    }
-  )
-
-  alert(`تم إرسال دعوة تسجيل إلى ${email}`)
-}
-
-/* دعوة المصمم */
+/* دعوة المصمم — النسخة الجديدة */
 const handleInvite = async (email) => {
   if (membership.value === "free") {
     alert("ميزة دعوة المصمم متاحة فقط في خطة Pro")
@@ -238,44 +225,55 @@ const handleInvite = async (email) => {
     return
   }
 
-  // 1) البحث عن المصمم عبر الفنكشن find-designer
+  // الحصول على التوكن
+  const { data: { session } } = await supabase.auth.getSession()
+
+  if (!session?.access_token) {
+    alert("يجب تسجيل الدخول لإرسال الدعوة")
+    return
+  }
+
+  // إرسال الطلب إلى دالة Supabase
   const res = await fetch(
-    "https://eypmuxcspmyizigzapsy.supabase.co/functions/v1/find-designer",
+    "https://eypmuxcspmyizigzapsy.supabase.co/functions/v1/send-registration-invite",
     {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email })
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${session.access_token}`
+      },
+      body: JSON.stringify({
+        email,
+        offer_id: props.cardId,
+        user_id: currentUserId.value
+      })
     }
   )
 
   const data = await res.json()
-  const designerProfile = data?.[0] || null
 
-  // 2) إذا المصمم غير موجود → إرسال دعوة تسجيل
-  if (!designerProfile) {
-    await sendRegistrationInvite(email)
-    return
+  // معالجة الرد
+  if (data.status === "linked") {
+    designerEmail.value = email
+    designerId.value = data.designer_id
+    alert("تم ربط المصمم بالعرض")
   }
 
-  // 3) المصمم موجود → ربطه بالعرض
-  await supabase
-    .from("offers")
-    .update({
-      designer_email: email,
-      designer_id: designerProfile.id
-    })
-    .eq("id", props.cardId)
-    .eq("user_id", currentUserId.value)
+  if (data.status === "pending") {
+    designerEmail.value = email
+    designerId.value = null
+    alert("المستخدم غير مسجل. تم إرسال دعوة تسجيل.")
+  }
 
-  designerEmail.value = email
-  designerId.value = designerProfile.id
+  if (data.error) {
+    alert("حدث خطأ أثناء إرسال الدعوة")
+    console.error(data.error)
+  }
 
-  alert("تم ربط المصمم بالعرض")
 }
 
 
-
-/* إلغاء الدعوة */
+/* إلغاء الدعوة — مؤقتًا من الواجهة */
 const handleCancelInvite = async () => {
   const confirmCancel = confirm("هل تريد إلغاء الدعوة وحذف المصمم من العرض؟")
   if (!confirmCancel) return
@@ -353,6 +351,7 @@ onMounted(async () => {
   }
 })
 </script>
+
 
 <style scoped>
 

@@ -12,6 +12,7 @@ const loading = ref(true)
 const screens = ref<Screen[]>([])
 const membership = ref<"free" | "pro">("free")
 const openScreenId = ref<string | null>(null)
+const user = ref<any>(null)
 
 const loadScreens = async () => {
   loading.value = true
@@ -20,6 +21,7 @@ const loadScreens = async () => {
   const { data: screensData, error } = await supabase
     .from("screens")
     .select("id, number, screen_id, offer_id, activation_code, offer_number, user_id")
+    .eq("user_id", user.value.id)
     .order("number", { ascending: true })
 
   if (error || !screensData) {
@@ -89,19 +91,21 @@ const assignOffer = async ({ screen, model }: { screen: Screen; model: Offer }) 
 
 onMounted(async () => {
   const { data: sessionData } = await supabase.auth.getSession()
-  const user = sessionData.session?.user
-  if (!user) return
+  user.value = sessionData.session?.user   // ← هنا التعديل الصحيح
+
+  if (!user.value) return
 
   const { data: profile } = await supabase
     .from("profiles")
     .select("plan")
-    .eq("id", user.id)
+    .eq("id", user.value.id)
     .single()
 
   membership.value = profile?.plan || "free"
 
   loadScreens()
 })
+
 </script>
 
 <template>
