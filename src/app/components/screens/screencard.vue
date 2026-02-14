@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted , watch } from "vue"
+import { ref, computed, watch } from "vue"
 import { supabase } from "@/supabase"
 
 import ScreenLinkSection from "./ScreenLinkSection.vue"
@@ -121,7 +121,8 @@ export interface Offer {
 const props = defineProps<{
   screen: Screen,
   locked: boolean,
-  openScreenId: string | null
+  openScreenId: string | null,
+  models: Offer[]          // ← الآن نستقبل العروض من الأب
 }>()
 
 const emit = defineEmits<{
@@ -135,8 +136,10 @@ const emit = defineEmits<{
 /* رابط التفعيل */
 const url = computed(() => `/activate/${props.screen.id}`)
 
-/* تحميل العروض */
-const models = ref<Offer[]>([])
+/* منطق التمدد */
+const showScreenLink = ref(false)
+const showOfferLink = ref(false)
+const showInfo = ref(false)
 
 watch(
   () => props.openScreenId,
@@ -148,20 +151,6 @@ watch(
     }
   }
 )
-
-onMounted(async () => {
-  const { data } = await supabase
-    .from("offers")
-    .select("id, offer_number")
-    .order("offer_number", { ascending: true })
-
-  models.value = data || []
-})
-
-/* منطق التمدد */
-const showScreenLink = ref(false)
-const showOfferLink = ref(false)
-const showInfo = ref(false)
 
 const openAndToggle = (section: 'screen' | 'offer' | 'info') => {
   if (props.openScreenId === props.screen.id) {
@@ -197,6 +186,7 @@ const toggleBroadcast = async () => {
   emit("broadcast", props.screen)
 }
 </script>
+
 
 <style scoped>
 

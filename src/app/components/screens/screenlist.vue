@@ -7,20 +7,36 @@ import type { Screen as CardScreen, Offer as CardOffer } from "./screencard.vue"
 type Screen = CardScreen
 type Offer = CardOffer
 
-
 const loading = ref(true)
 const screens = ref<Screen[]>([])
+const offers = ref<Offer[]>([])        // ← العروض هنا
 const membership = ref<"free" | "pro">("free")
 const openScreenId = ref<string | null>(null)
 const user = ref<any>(null)
 
+/* ============================
+   تحميل عروض المستخدم فقط
+============================ */
+const loadOffers = async () => {
+  const { data, error } = await supabase
+    .from("offers")
+    .select("id, offer_number")
+    .eq("user_id", user.value.id)     // ← أهم سطر
+    .order("offer_number", { ascending: true })
+
+  offers.value = data || []
+}
+
+/* ============================
+   تحميل الشاشات + دمج screen_activation
+============================ */
 const loadScreens = async () => {
   loading.value = true
 
   // 1) جلب الشاشات من جدول screens
   const { data: screensData, error } = await supabase
     .from("screens")
-    .select("id, number, screen_id, offer_id, activation_code, offer_number, user_id")
+    .select("id, number, screen_id, offer_id, activation_code, user_id")
     .eq("user_id", user.value.id)
     .order("number", { ascending: true })
 
@@ -29,7 +45,7 @@ const loadScreens = async () => {
     return
   }
 
-  // 2) جلب بيانات screen_activation (كل بيانات الجهاز + is_active)
+  // 2) جلب بيانات screen_activation
   const { data: activationData } = await supabase
     .from("screen_activation")
     .select("screen_id, is_active, device_id, resolution, app_version, os_version, ip_address, last_seen")
@@ -53,10 +69,16 @@ const loadScreens = async () => {
   loading.value = false
 }
 
+/* ============================
+   قفل الشاشات حسب العضوية
+============================ */
 const isLocked = (screen: Screen) => {
   return membership.value === "free" && screen.number > 1
 }
 
+/* ============================
+   تفعيل / إيقاف الشاشة
+============================ */
 const toggleScreen = async (screen: Screen) => {
   if (isLocked(screen)) return
 
@@ -70,28 +92,29 @@ const toggleScreen = async (screen: Screen) => {
   screen.is_active = newState
 }
 
+/* ============================
+   ربط الشاشة بالعرض
+============================ */
 const assignOffer = async ({ screen, model }: { screen: Screen; model: Offer }) => {
-  // 1) ربط الشاشة بالعرض
   await supabase
     .from("screens")
     .update({ offer_id: model.id })
     .eq("id", screen.id)
 
-  // 2) تحديث العرض بمقاس الشاشة
   await supabase
     .from("offers")
-    .update({
-      resolution: screen.resolution
-    })
+    .update({ resolution: screen.resolution })
     .eq("id", model.id)
 
-  // تحديث الواجهة
   loadScreens()
 }
 
+/* ============================
+   تحميل البيانات عند الدخول
+============================ */
 onMounted(async () => {
   const { data: sessionData } = await supabase.auth.getSession()
-  user.value = sessionData.session?.user   // ← هنا التعديل الصحيح
+  user.value = sessionData.session?.user
 
   if (!user.value) return
 
@@ -103,25 +126,29 @@ onMounted(async () => {
 
   membership.value = profile?.plan || "free"
 
-  loadScreens()
+  await loadOffers()     // ← تحميل العروض أولاً
+  await loadScreens()    // ← ثم تحميل الشاشات
 })
-
 </script>
+
 
 <template>
   <div class="screen-list">
     <div v-if="loading">جاري تحميل الشاشات...</div>
 
-    <ScreenCard
-      v-for="screen in screens"
-      :key="screen.id"
-      :screen="screen"
-      :locked="isLocked(screen)"
-      :openScreenId="openScreenId"
-      @toggle="() => toggleScreen(screen)"
-      @open="openScreenId = screen.id"
-      @assign="assignOffer"
-    />
+   <ScreenCard
+  v-for="screen in screens"
+  :key="screen.id"
+  :screen="screen"
+  :locked="isLocked(screen)"
+  :openScreenId="openScreenId"
+  :models="offers"
+  @toggle="toggleScreen"
+  @open="openScreenId = $event"
+  @assign="assignOffer"
+/>
+
+
   </div>
 </template>
 

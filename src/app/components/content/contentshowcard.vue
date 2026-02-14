@@ -108,18 +108,33 @@ const addCard = async () => {
 }
 
 const deleteCard = async (offerId) => {
+
+  // 1) التحقق هل العرض مرتبط بشاشة
+  const { data: screensUsingOffer } = await supabase
+    .from("screens")
+    .select("id, number")
+    .eq("offer_id", offerId)
+
+  if (screensUsingOffer?.length) {
+    alert(`لا يمكن حذف العرض لأنه مرتبط بالشاشة رقم ${screensUsingOffer[0].number}`)
+    return
+  }
+
+  // 2) حذف الملفات المرتبطة بالعرض
   await supabase
     .from("offer_items")
     .delete()
     .eq("offer_id", offerId)
     .eq("user_id", currentUserId.value)
 
+  // 3) حذف العرض نفسه
   await supabase
     .from("offers")
     .delete()
     .eq("id", offerId)
     .eq("user_id", currentUserId.value)
 
+  // 4) تحديث الواجهة
   cards.value = cards.value.filter(c => c.id !== offerId)
 
   if (openCardId.value === offerId) {
@@ -132,6 +147,7 @@ const deleteCard = async (offerId) => {
 
   locked.value = membership.value === "free"
 }
+
 </script>
 
 <style scoped>
