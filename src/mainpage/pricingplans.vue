@@ -1,31 +1,22 @@
 <template>
-  <section class="pricing-section">
-
+  <section class="pricing-section" dir="rtl">
+<h2>الاشتراك والباقات</h2>
     <div class="single-card">
 
       <!-- زر شهري / سنوي داخل البطاقة -->
-      <div class="toggle-container">
-        <button
-          :class="['toggle-btn', billingCycle === 'monthly' ? 'active' : '']"
-          @click="billingCycle = 'monthly'"
-        >
-          شهري
-        </button>
 
-        <button
-          :class="['toggle-btn', billingCycle === 'yearly' ? 'active' : '']"
-          @click="billingCycle = 'yearly'"
-        >
-          سنوي
-        </button>
-      </div>
 
       <div class="plans-wrapper">
 
         <!-- الباقة الأساسية -->
         <div class="plan-section">
           <h3 class="plan-title">الباقة الأساسية</h3>
-          <p class="plan-price">مجانية</p>
+              <div class="w-full flex justify-center my-12">
+      <googleloginbutton label="ابدأ الآن مجانًا" client:load />
+
+    </div>
+
+          <p class="plan-price">مجانا</p>
 
           <ul class="plan-features">
             <li>✔ رفع الصور حتى صورتين</li>
@@ -41,21 +32,34 @@
         <div class="plan-section">
           <h3 class="plan-title">الباقة الاحترافية</h3>
 
+                <div class="toggle-container">
+        <button
+          :class="['toggle-btn', billingCycle === 'monthly' ? 'active' : '']"
+          @click="billingCycle = 'monthly'"
+        >
+          شهري
+        </button>
+
+        <button
+          :class="['toggle-btn', billingCycle === 'yearly' ? 'active' : '']"
+          @click="billingCycle = 'yearly'"
+        >
+          سنوي
+        </button>
+      </div>
+
           <p class="plan-price">
-            {{ billingCycle === 'monthly' ? '70 ريال' : '650 ريال' }}
+            {{ billingCycle === 'monthly' ? '120 ريال' : '650 ريال' }}
           </p>
 
-          <p class="plan-subtitle">
-            {{ billingCycle === 'monthly' ? 'شهري' : 'سنوي' }}
-          </p>
+
 
           <ul class="plan-features">
-            <li>✔ كل مميزات الباقة الأساسية</li>
+            <li>+ كل مميزات الباقة الأساسية</li>
             <li>✔ رفع الصور والفيديو</li>
-            <li>✔ جدولة المحتوى</li>
             <li>✔ حتى 5 شاشات</li>
-            <li>✔ إنشاء حتى 30 عرض</li>
-            <li>✔ مساحة تخزينية سحابية</li>
+            <li>✔ إنشاء حتى 20 عرض</li>
+            <li>✔ دعوة مصمم للعرض</li>
             <li>✔ أولوية الدعم الفني</li>
           </ul>
         </div>
@@ -69,6 +73,8 @@
 
 <script setup>
 import { ref } from "vue"
+import googleloginbutton from "@/mainpage/googleloginbutton.vue"
+
 const billingCycle = ref("monthly")
 </script>
 
@@ -81,15 +87,26 @@ const billingCycle = ref("monthly")
   padding: 0 1.5rem;
 }
 
+.pricing-section h2 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  color: #111827;
+}
+
+
 /* البطاقة */
 .single-card {
   background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 1rem;
+  border: none;              /* إزالة كل الحدود */
+  border-top: 1px solid #e5e7eb; /* الإبقاء على الحد السفلي فقط */
+  border-radius: 0;          /* بدون زوايا */
   padding: 2rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: none;          /* إزالة الظل لو تبغى شكل أنظف */
   text-align: center;
 }
+
 
 /* زر التبديل */
 .toggle-container {
@@ -161,7 +178,7 @@ const billingCycle = ref("monthly")
   padding: 0;
   margin: 0 auto;
   max-width: 18rem;
-  text-align: right;
+  text-align: center;
   color: #374151;
   display: flex;
   flex-direction: column;

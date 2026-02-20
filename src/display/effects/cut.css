@@ -1,0 +1,15 @@
+/* cut.css */
+
+/* الصورة الجديدة */
+.effect-cut-in {
+  opacity: 1 !important;
+  z-index: 2;
+  transition: none !important; /* ظهور لحظي */
+}
+
+/* الصورة القديمة */
+.effect-cut-out {
+  opacity: 0 !important;
+  z-index: 1;
+  transition: none !important; /* اختفاء لحظي */
+}

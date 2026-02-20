@@ -1,15 +1,18 @@
 <template>
   <div class="display-container">
 
+    <!-- شاشة العرض -->
     <ScreenView 
-  v-if="ready" 
-  :key="`${duration}-${effect}`"
-  :images="images" 
-  :effect="effect"
-  :duration="duration" 
-/>
+      v-if="ready" 
+      :key="`${duration}-${effect}`"
+      :items="items" 
+      :effect="effect"
+      :pause="duration"     
+    />
 
-<p v-else-if="waiting" class="waiting"> الشاشة في وضع الانتظار… يرجى تفعيلها من لوحة التحكم </p>
+    <p v-else-if="waiting" class="waiting">
+      الشاشة في وضع الانتظار… يرجى تفعيلها من لوحة التحكم
+    </p>
 
     <p v-else-if="noOffer" class="no-offer">
       لا يوجد عرض مرتبط بهذه الشاشة حالياً
@@ -30,9 +33,9 @@ import ScreenView from "./screenview.vue"
 const ready = ref(false)
 const noOffer = ref(false)
 const waiting = ref(false)
-const images = ref([])
+const items = ref([])
 const effect = ref(null)
-const duration = ref(10)
+const duration = ref(10)   // هذه هي pause
 
 onMounted(async () => {
   const screenUUID = localStorage.getItem("active_screen_id")
@@ -42,7 +45,6 @@ onMounted(async () => {
     return
   }
 
-  // قراءة حالة الشاشة من screen_activation
   const { data: activation, error: activationError } = await supabase
     .from("screen_activation")
     .select("screen_id, is_active, offer_id")
@@ -54,13 +56,11 @@ onMounted(async () => {
     return
   }
 
-  // إذا الشاشة غير مفعّلة → وضع الانتظار
   if (!activation.is_active) {
     waiting.value = true
     return
   }
 
-  // قراءة العرض من screen_activation مباشرة
   const offerId = activation.offer_id
 
   if (!offerId) {
@@ -68,67 +68,31 @@ onMounted(async () => {
     return
   }
 
-  await loadImages(offerId)
+  await loadItems(offerId)
   ready.value = true
-
-  // الاشتراك في تحديثات حالة الشاشة
-  supabase
-    .channel(`activation_${screenUUID}`)
-    .on(
-      "postgres_changes",
-      {
-        event: "UPDATE",
-        schema: "public",
-        table: "screen_activation",
-        filter: `id=eq.${screenUUID}`
-      },
-      async (payload) => {
-        const newOffer = payload.new.offer_id
-        if (newOffer) {
-          await loadImages(newOffer)
-        }
-      }
-    )
-    .subscribe()
-
-  // الاشتراك في تحديثات عناصر العرض
-  supabase
-    .channel(`offer_${offerId}`)
-    .on(
-      "postgres_changes",
-      {
-        event: "*",
-        schema: "public",
-        table: "offer_items",
-        filter: `offer_id=eq.${offerId}`
-      },
-      async () => {
-        await loadImages(offerId)
-      }
-    )
-    .subscribe()
 })
 
-async function loadImages(offerId) {
-  // 1) استعلام الصور
-  const { data: items, error: itemsError } = await supabase
+async function loadItems(offerId) {
+  const { data: rows } = await supabase
     .from("offer_items")
-    .select("secure_url")
+    .select("secure_url, type")
     .eq("offer_id", offerId)
     .order("order_index", { ascending: true })
 
-  // 2) استعلام مدة العرض والتأثير
-  const { data: offerData, error: offerError } = await supabase
+  const { data: offerData } = await supabase
     .from("offers")
     .select("duration, effect")
     .eq("id", offerId)
     .single()
 
-  if (!itemsError && items?.length) {
-    images.value = items.map(img => img.secure_url)
+  if (rows?.length) {
+    items.value = rows.map(item => ({
+      type: item.type.startsWith("image") ? "images" : item.type,
+      url: item.secure_url
+    }))
 
-    effect.value = offerData?.effect || "fade"
-    duration.value = Number(offerData?.duration) || 10
+    effect.value = offerData?.effect || "strip"
+    duration.value = Number(offerData?.duration) || 3   // هذه pause
 
     ready.value = true
     noOffer.value = false
@@ -169,5 +133,4 @@ async function loadImages(offerId) {
   text-align: center;
   margin-top: 40vh;
 }
-
 </style>

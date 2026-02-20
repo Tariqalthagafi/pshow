@@ -11,32 +11,35 @@
       </label>
 
       <select
-  :value="effect"
-  @change="$emit('update:effect', $event.target.value)"
->
-  <option value="fade">تلاشي (Fade)</option>
-  <option value="zoom">تكبير بسيط (Zoom)</option>
-  <option value="kenburns">كين بيرنز (احترافي)</option>
-</select>
-
+        :value="effect"
+        @change="$emit('update:effect', $event.target.value)"
+      >
+        <option value="strip">سحب شرائحي (Strip)</option>
+        <option value="cut">انتقال مباشر (Cut)</option>
+        <option value="fade">تلاشي (Fade)</option>
+        <option value="frost">الصقيع (Frost)</option>       
+        <option value="sliceflip"> قلب الصفحة  (sliceflip)</option>
+        
+      </select>
 
     </div>
-<div class="field small">
-  <label>
-    مدة الانتقال 
-    <div class="tooltip-wrapper">
-      <span class="tooltip-icon">?</span>
-      <span class="tooltip-text">مدة تبديل الصور في السلايدر بالثواني</span>
-    </div>
-  </label>
 
-  <input
-    type="number"
-    min="1"
-    :value="duration"
-    @input="$emit('update:duration', Number($event.target.value))"
-  />
-</div>
+    <div class="field small">
+      <label>
+        مدة الانتقال 
+        <div class="tooltip-wrapper">
+          <span class="tooltip-icon">?</span>
+          <span class="tooltip-text">مدة بقاء الصورة قبل الانتقال</span>
+        </div>
+      </label>
+
+      <input
+        type="number"
+        min="1"
+        :value="duration"
+        @input="$emit('update:duration', Number($event.target.value))"
+      />
+    </div>
 
   </div>
 </template>
@@ -45,17 +48,17 @@
 defineProps({
   effect: {
     type: String,
-    default: "slide-left"
+    default: "strip"
   },
   duration: {
     type: Number,
-    default: 3 // 3 ثواني افتراضيًا
+    default: 3
   }
 })
 
 defineEmits(["update:effect", "update:duration"])
-
 </script>
+
 
 <style scoped>
 .top-row {

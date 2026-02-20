@@ -1,47 +1,90 @@
 <template>
-  <div class="slide-content flex flex-col items-center text-center px-6 py-12">
+  <div class="slide-content">
 
-    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 leading-snug">
-      لماذا يختار المستخدمون ProShow؟
-    </h2>
+    <div class="inner-wrapper">
 
-    <p class="text-gray-600 text-lg md:text-xl max-w-2xl leading-relaxed mb-8">
-      نظام متكامل لإدارة الشاشات والعروض باحترافية.  
-      واجهة سهلة، أداء سريع، وأدوات ذكية تساعدك على تنظيم المحتوى  
-      ودعوة المصممين ومتابعة العمل من مكان واحد.
-    </p>
+      <!-- النص يسار -->
+      <div class="text-box">
+        <h2>
+          لماذا نحن… واجهة سهلة، تحكّم مركزي، وسعر معقول يمنحك قيمة عالية وتجربة إدارة احترافية لشاشاتك من مكان واحد.
+        </h2>
+      </div>
 
-    <ul class="text-gray-700 text-lg max-w-xl space-y-3 mb-8">
-      <li>✔ واجهة بسيطة وسهلة الاستخدام</li>
-      <li>✔ إدارة مركزية لكل الشاشات والعروض</li>
-      <li>✔ دعوات مصممين مدمجة داخل النظام</li>
-      <li>✔ أمان عالي وسرعة عبر Supabase</li>
-      <li>✔ تحديثات مستمرة وتجربة محسّنة</li>
-    </ul>
+      <!-- الصورة يمين -->
+      <div class="image-box">
+        <img 
+          src="/slides/slide4.jpg" 
+          alt="Trusted professional working confidently"
+        />
+      </div>
+
+    </div>
 
   </div>
 </template>
 
-<script setup>
-</script>
-
 <style scoped>
+/* السلايد كامل */
 .slide-content {
   opacity: 0;
   transform: translateY(12px);
   animation: fadeInUp .7s ease forwards;
 
-  /* التوسيط */
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center; /* عمودي */
-  align-items: center;     /* أفقي */
-  text-align: center;
-
-  height: 100%; /* مهم جداً */
+  justify-content: center;
+  padding: 40px 20px;
 }
 
+/* الحاوية الداخلية */
+.inner-wrapper {
+  width: 100%;
+  max-width: 850px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
 
+/* النص يسار */
+.text-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.text-box h2 {
+  max-width: 360px;
+  text-align: left;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 1.5;
+  color: #1f2937;
+}
+
+/* الصورة يمين */
+.image-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.image-box img {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* على الشاشات الكبيرة: صف */
+@media (min-width: 768px) {
+  .inner-wrapper {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* الأنيميشن */
 @keyframes fadeInUp {
   to {
     opacity: 1;

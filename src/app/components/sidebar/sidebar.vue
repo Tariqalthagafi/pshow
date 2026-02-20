@@ -10,6 +10,15 @@
 
     <nav class="sidebar-nav">
 
+      <a 
+  href="/app/usage-guide" 
+  class="sidebar-link"
+  :class="{ active: currentPath === '/app/usage-guide' }"
+>
+  <img class="icon-img" src="/icons/info.png" />
+  <span class="label" v-if="!collapsed">دليل الاستخدام</span>
+</a>
+
             <a 
         href="/app/content" 
         class="sidebar-link"
@@ -34,7 +43,7 @@
         :class="{ active: currentPath === '/app/membership' }"
       >
         <img class="icon-img" src="/icons/settings.jpg" />
-        <span class="label" v-if="!collapsed">العضوية</span>
+        <span class="label" v-if="!collapsed">الاعدادات</span>
       </a>
 
             <a 

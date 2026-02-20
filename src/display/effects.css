@@ -1,0 +1,157 @@
+/* 1 */
+/* دخول الصورة الجديدة من اليسار */
+@keyframes stripIn {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* خروج الصورة القديمة إلى اليمين */
+@keyframes stripOut {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* كلاس الدخول */
+.effect-strip-in {
+  animation: stripIn 2s ease-in-out forwards;
+}
+
+/* كلاس الخروج */
+.effect-strip-out {
+  animation: stripOut 2s ease-in-out forwards;
+}
+
+/* 2 */
+/* Cut In — الصورة الجديدة */
+.effect-cut-in {
+  opacity: 1 !important;
+  z-index: 2;
+  transition: opacity 0s linear;
+}
+
+/* Cut Out — الصورة القديمة */
+.effect-cut-out {
+  opacity: 0 !important;
+  z-index: 1;
+  transition: opacity 0s linear;
+}
+
+
+/* 3 */
+
+/* Fade */
+.effect-fade {
+  animation: fadeEffect var(--duration) ease-in-out forwards;
+}
+
+@keyframes fadeEffect {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+
+/* Zoom In */
+.effect-zoom-in {
+  animation: zoomInEffect var(--duration) ease-in-out forwards;
+}
+
+@keyframes zoomInEffect {
+  from { transform: scale(1) }
+  to   { transform: scale(1.15) }
+}
+
+/* Zoom Out */
+.effect-zoom-out {
+  animation: zoomOutEffect var(--duration) ease-in-out forwards;
+}
+
+@keyframes zoomOutEffect {
+  from { transform: scale(1.2) }
+  to   { transform: scale(1) }
+}
+
+/* Ken Burns (Zoom + Move) */
+.effect-kenburns {
+  animation: kenburnsEffect var(--duration) ease-in-out forwards;
+}
+
+@keyframes kenburnsEffect {
+  from { transform: scale(1) translate(0,0) }
+  to   { transform: scale(1.2) translate(-40px,-40px) }
+}
+
+/* Slide Left */
+.effect-slide-left {
+  animation: slideLeftEffect var(--duration) ease-in-out forwards;
+}
+
+@keyframes slideLeftEffect {
+  from { transform: translateX(50px); opacity: 0 }
+  to   { transform: translateX(0); opacity: 1 }
+}
+
+/* Slide Right */
+.effect-slide-right {
+  animation: slideRightEffect var(--duration) ease-in-out forwards;
+}
+
+@keyframes slideRightEffect {
+  from { transform: translateX(-50px); opacity: 0 }
+  to   { transform: translateX(0); opacity: 1 }
+}
+
+/* Blur In */
+.effect-blur {
+  animation: blurEffect var(--duration) ease-in-out forwards;
+}
+
+@keyframes blurEffect {
+  from { filter: blur(20px); opacity: 0 }
+  to   { filter: blur(0); opacity: 1 }
+}
+
+/* Rotate */
+.effect-rotate {
+  animation: rotateEffect var(--duration) ease-in-out forwards;
+}
+
+@keyframes rotateEffect {
+  from { transform: rotate(-5deg) scale(1) }
+  to   { transform: rotate(0deg) scale(1.1) }
+}
+
+/* Melt Dissolve Transition — Improved */
+.effect-melt {
+  animation: meltEffect var(--duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: opacity, filter, transform;
+}
+
+@keyframes meltEffect {
+  0% {
+    opacity: 0;
+    filter: blur(25px);
+    transform: scale(1.08);
+  }
+  35% {
+    opacity: 0.6;
+    filter: blur(12px);
+    transform: scale(1.04);
+  }
+  70% {
+    opacity: 0.9;
+    filter: blur(4px);
+    transform: scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}

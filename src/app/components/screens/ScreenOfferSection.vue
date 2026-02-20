@@ -60,25 +60,38 @@ const selectedOfferNumber = computed(() => {
   return found ? found.offer_number : props.screen.offer_id
 })
 
+/* ============================
+   عند اختيار عرض
+   ============================ */
 const selectModel = async (model: any) => {
   await supabase
     .from("screens")
     .update({ offer_id: model.id })
     .eq("id", props.screen.id)
 
+  // تحديث فوري داخل المكوّن
+  props.screen.offer_id = model.id
+
   dropdownOpen.value = false
   emit("assign", { screen: props.screen, model })
 }
 
+/* ============================
+   عند إزالة العرض
+   ============================ */
 const removeModel = async () => {
   await supabase
     .from("screens")
     .update({ offer_id: null })
     .eq("id", props.screen.id)
 
+  // تحديث فوري داخل المكوّن
+  props.screen.offer_id = null
+
   emit("remove", props.screen)
 }
 </script>
+
 
 <style scoped>
 .info-box {

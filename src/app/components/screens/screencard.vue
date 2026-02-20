@@ -70,12 +70,13 @@
     />
 
     <ScreenOfferSection
-      v-if="showOfferLink"
-      :screen="screen"
-      :models="models"
-      @assign="emit('assign', $event)"
-      @remove="emit('remove', $event)"
-    />
+  v-if="showOfferLink"
+  :screen="screen"
+  :models="models"
+  @assign="updateAssignedOffer"
+  @remove="clearAssignedOffer"
+/>
+
 
     <ScreenInfoSection
       v-if="showInfo"
@@ -185,6 +186,29 @@ const toggleBroadcast = async () => {
   props.screen.is_broadcasting = newState
   emit("broadcast", props.screen)
 }
+
+/* ============================
+   تحديث العرض عند التعيين
+   ============================ */
+const updateAssignedOffer = (payload: { screen: Screen; model: Offer }) => {
+  // تحديث الشاشة محليًا
+  props.screen.offer_id = payload.model.id
+
+  // إرسال الحدث للأعلى (لو الأب الأكبر يحتاجه)
+  emit("assign", payload)
+}
+
+/* ============================
+   إزالة العرض عند الضغط على ✕
+   ============================ */
+const clearAssignedOffer = (screen: Screen) => {
+  // تحديث الشاشة محليًا
+  props.screen.offer_id = null
+
+  // إرسال الحدث للأعلى
+  emit("remove", screen)
+}
+
 </script>
 
 

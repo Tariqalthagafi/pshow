@@ -1,8 +1,12 @@
 <template>
   <header class="header-bar">
     <Logo  />
-    <googleloginbutton client:load />
-
+    
+    <!-- زر تسجيل الدخول في المنتصف -->
+    <div class="w-full flex justify-center my-12">
+      <googleloginbutton client:load />
+    </div>
+    
   </header>
 </template>
 

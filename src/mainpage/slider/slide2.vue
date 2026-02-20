@@ -1,38 +1,90 @@
 <template>
-  <div class="slide-content flex flex-col items-center text-center px-6 py-12">
+  <div class="slide-content" dir="rtl">
 
-    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 leading-snug">
-      إدارة المحتوى أصبحت أسهل من أي وقت
-    </h2>
+    <div class="inner-wrapper">
 
-    <p class="text-gray-600 text-lg md:text-xl max-w-2xl leading-relaxed mb-8">
-      ارفع الصور والفيديوهات، أنشئ عروضك، وعدّل ترتيب الشرائح بضغطة زر.  
-      كل شيء منظم في واجهة بسيطة وسريعة تمنحك تجربة استخدام سلسة واحترافية.
-    </p>
+      <!-- النص يسار -->
+      <div class="text-box">
+        <h2>
+          سهولة إدارة المحتوى على شاشاتك مع مزامنة مباشرة للتغييرات؛  
+          أنشئ عروضك، وأرفق الصور والفيديو، ورتّب الشرائح كما تريد.
+        </h2>
+      </div>
+
+      <!-- الصورة يمين -->
+      <div class="image-box">
+        <img 
+          src="/slides/slide2.webp" 
+          alt="Content management preview"
+        />
+      </div>
+
+    </div>
 
   </div>
 </template>
 
-<script setup>
-</script>
-
 <style scoped>
+/* السلايد كامل */
 .slide-content {
   opacity: 0;
   transform: translateY(12px);
   animation: fadeInUp .7s ease forwards;
 
-  /* التوسيط */
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center; /* عمودي */
-  align-items: center;     /* أفقي */
-  text-align: center;
-
-  height: 100%; /* مهم جداً */
+  justify-content: center;
+  padding: 40px 20px;
 }
 
+/* الحاوية الداخلية */
+.inner-wrapper {
+  width: 100%;
+  max-width: 850px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
 
+/* النص يسار */
+.text-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.text-box h2 {
+  max-width: 360px;
+  text-align: left;
+  font-size: 20px;
+  line-height: 1.7;
+  color: #4b5563;
+}
+
+/* الصورة يمين */
+.image-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.image-box img {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* على الشاشات الكبيرة: صف */
+@media (min-width: 768px) {
+  .inner-wrapper {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* الأنيميشن */
 @keyframes fadeInUp {
   to {
     opacity: 1;

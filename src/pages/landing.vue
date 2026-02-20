@@ -5,3 +5,9 @@
 <script setup lang="ts">
 import landingcontainer from '@/mainpage/landingcontainer.vue'
 </script>
+
+<style>
+body {
+  background-color: #ffffff !important;
+}
+</style>

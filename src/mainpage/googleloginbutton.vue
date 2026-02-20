@@ -1,13 +1,22 @@
 <template>
-  <button class="google-btn" @click="loginWithGoogle">
-    <span>تسجيل الدخول</span>
-    <img src="/google-icon.png" alt="Google" class="google-icon" />
-  </button>
+  <div class="google-wrapper">
+    <button class="google-btn" @click="loginWithGoogle">
+  <span>{{ label }}</span>
+  <img src="/google-icon.png" alt="Google" class="google-icon" />
+</button>
+
+  </div>
 </template>
 
 <script setup>
 import { supabase } from "@/supabase"
 
+const props = defineProps({
+  label: {
+    type: String,
+    default: "تسجيل الدخول"
+  }
+})
 
 async function loginWithGoogle() {
   const { error } = await supabase.auth.signInWithOAuth({
@@ -21,10 +30,17 @@ async function loginWithGoogle() {
     console.error("Google Auth Error:", error)
   }
 }
-
 </script>
 
-<style>
+<style scoped>
+.google-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* زر Google */
 .google-btn {
   display: flex;
   align-items: center;

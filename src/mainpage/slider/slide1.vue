@@ -1,38 +1,89 @@
 <template>
-  <div class="slide-content flex flex-col items-center text-center px-6 py-12">
+  <div class="slide-content">
 
-    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 leading-snug">
-      تحكّم كامل في شاشات منشأتك من مكان واحد
-    </h2>
+    <div class="inner-wrapper">
 
-    <p class="text-gray-600 text-lg md:text-xl max-w-2xl leading-relaxed mb-8">
-      منصة ProShow تمنحك إدارة مركزية لكل شاشات العرض.  
-      حمّل المحتوى، رتّب العروض، وجدول التشغيل بسهولة تامة وبدون أي تعقيد.
-    </p>
+      <!-- الصورة يسار -->
+      <div class="image-box">
+        <img 
+          src="/slides/slide1.jpg" 
+          alt="Digital signage screens" 
+        />
+      </div>
+
+      <!-- النص يمين -->
+      <div class="text-box">
+        <h2>
+          من مكان واحد تحكّم في كل شاشات منشأتك، حمل المحتوى رتّب العروض على الشاشات وابدأ البث بسهولة تامة وبدون أي تعقيد.
+        </h2>
+      </div>
+
+    </div>
 
   </div>
 </template>
 
-<script setup>
-</script>
-
 <style scoped>
+/* السلايد كامل */
 .slide-content {
   opacity: 0;
   transform: translateY(12px);
   animation: fadeInUp .7s ease forwards;
 
-  /* التوسيط */
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center; /* عمودي */
-  align-items: center;     /* أفقي */
-  text-align: center;
-
-  height: 100%; /* مهم جداً */
+  justify-content: center;
+  padding: 40px 20px;
 }
 
+/* الحاوية الداخلية */
+.inner-wrapper {
+  width: 100%;
+  max-width: 850px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
 
+/* الصورة يسار */
+.image-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.image-box img {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* النص يمين */
+.text-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.text-box h2 {
+  max-width: 360px;
+  text-align: right;
+  font-size: 20px;
+  line-height: 1.7;
+  color: #4b5563;
+}
+
+/* على الشاشات الكبيرة: صف */
+@media (min-width: 768px) {
+  .inner-wrapper {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* الأنيميشن */
 @keyframes fadeInUp {
   to {
     opacity: 1;

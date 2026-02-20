@@ -1,0 +1,35 @@
+/* strip.css */
+
+/* دخول الصورة الجديدة من اليسار */
+@keyframes stripIn {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* خروج الصورة القديمة إلى اليمين */
+@keyframes stripOut {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* الصورة الجديدة */
+.effect-strip-in {
+  animation: stripIn 1.2s ease-in-out forwards;
+  z-index: 3; /* فوق القديمة */
+  opacity: 1 !important; /* لازم تظهر فورًا */
+}
+
+/* الصورة القديمة */
+.effect-strip-out {
+  animation: stripOut 1.2s ease-in-out forwards;
+  z-index: 2; /* تحت الجديدة */
+  opacity: 1 !important; /* لا تختفي قبل السحب */
+}

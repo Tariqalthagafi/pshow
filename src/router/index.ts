@@ -13,6 +13,8 @@ import AffiliatePage from '@/pages/affiliate.vue'
 
 import DisplayPage from '@/pages/display.vue'   // ← مهم جداً
 import ActivatePage from '@/pages/activate.vue'
+import UsageGuide from '@/pages/UsageGuide.vue'
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -28,6 +30,7 @@ const router = createRouter({
       path: '/app',
       component: MainLayout,
       children: [
+        { path: 'usage-guide', component: UsageGuide },
         { path: 'tasks', component: TasksPage },
         { path: 'screens', component: ScreensPage },
         { path: 'membership', component: MembershipPage },
