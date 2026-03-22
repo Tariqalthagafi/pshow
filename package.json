@@ -11,8 +11,9 @@
   "dependencies": {
     "@splidejs/splide": "^4.1.4",
     "@splidejs/vue-splide": "^0.6.12",
-    "@supabase/supabase-js": "^2.93.3",
+    "@supabase/supabase-js": "^2.98.0",
     "@videojs/http-streaming": "^3.17.4",
+    "pinia": "^3.0.4",
     "swiper": "^12.1.0",
     "video.js": "^8.23.7",
     "videojs-youtube": "^3.0.1",

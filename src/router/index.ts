@@ -1,80 +1,26 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { supabase } from "@/supabase"
+import { createRouter, createWebHistory } from "vue-router"
 
-import LandingPage from '@/pages/landing.vue'
-import LoginPage from '@/pages/login.vue'
-
-import MainLayout from '@/layouts/MainLayout.vue'
-import TasksPage from '@/pages/tasks.vue'
-import ScreensPage from '@/pages/screens.vue'
-import MembershipPage from '@/pages/membership.vue'
-import ContentPage from '@/pages/content.vue'
-import AffiliatePage from '@/pages/affiliate.vue'
-
-import DisplayPage from '@/pages/display.vue'   // ← مهم جداً
-import ActivatePage from '@/pages/activate.vue'
-import UsageGuide from '@/pages/UsageGuide.vue'
-
+import { usageGuideRoutes } from "@/workspace/usage-guide/router/routes"
+import { mainpageRoutes } from "@/mainpage/router/routes"
+import { affiliateRoutes } from "@/workspace/affiliate/router/routes"
+import { offersRoutes } from "@/workspace/offers/router/routes"
+import { screensRoutes } from "@/workspace/screens/router/routes"
+import { membershipRoutes } from "@/workspace/membership/router/routes"
+import { designTasksRoutes } from "@/workspace/design-tasks/router/routes"
+import { settingsRoutes } from "@/workspace/settings/router/routes"
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', component: LandingPage },
-    { path: '/login', component: LoginPage },
-
-    // صفحة العرض (بدون حماية)
-    { path: '/activate', component: ActivatePage },
-    { path: '/display', component: DisplayPage },
-
-    {
-      path: '/app',
-      component: MainLayout,
-      children: [
-        { path: 'usage-guide', component: UsageGuide },
-        { path: 'tasks', component: TasksPage },
-        { path: 'screens', component: ScreensPage },
-        { path: 'membership', component: MembershipPage },
-        { path: 'content', component: ContentPage },
-        { path: 'affiliate', component: AffiliatePage },
-      ]
-    }
+    ...usageGuideRoutes,
+    ...mainpageRoutes,
+    ...affiliateRoutes,
+    ...offersRoutes,
+    ...screensRoutes,
+    ...membershipRoutes,
+    ...designTasksRoutes,
+    ...settingsRoutes
   ]
-})
-
-
-// ⭐ متغير لحفظ حالة الجلسة بعد تسجيل الدخول
-let authReady = false
-
-// ⭐ Supabase يعطي الجلسة فورًا بعد العودة من Google
-supabase.auth.onAuthStateChange((event, session) => {
-  if (session) {
-    authReady = true
-  }
-})
-
-// ⭐ حماية مسارات /app
-router.beforeEach(async (to, from, next) => {
-  if (!to.path.startsWith('/app')) {
-    return next()
-  }
-
-  // لو Supabase لم يحمّل الجلسة بعد → انتظر
-  if (!authReady) {
-    const { data: sessionData } = await supabase.auth.getSession()
-    if (sessionData.session) {
-      authReady = true
-    }
-  }
-
-  // الآن نتحقق
-  const { data: sessionData } = await supabase.auth.getSession()
-  const user = sessionData.session?.user
-
-  if (!user) {
-    return next('/login')
-  }
-
-  next()
 })
 
 export default router

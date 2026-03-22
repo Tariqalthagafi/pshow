@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { supabase } from "@/supabase"
-import Sidebar from '@/app/components/sidebar/sidebar.vue'
+import Sidebar from '@/workspace/sidebar/sidebar.vue'
 
 const profile = ref(null)
 const loading = ref(true)
