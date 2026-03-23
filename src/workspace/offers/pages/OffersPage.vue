@@ -56,7 +56,7 @@
 <script setup>
 import { onMounted } from "vue"
 import ContentCard from "@/workspace/offers/components/imgcontent/contentcard.vue"
-import VideoCard from "@/workspace/offers/components/videocontent/VideoCard.vue"
+import VideoCard from "@/workspace/offers/components/Videocontent/VideoCard.vue"
 import OfferTypeSelector from "@/workspace/offers/components/shared/OfferTypeSelector.vue"
 import { useOffers } from "../composables/useOffers"
 
