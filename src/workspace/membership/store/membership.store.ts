@@ -1,10 +1,10 @@
 import { defineStore } from "pinia"
 import {
-  fetchMembershipPlans,
-  fetchUserSubscription,
-  updateUserSubscription,
-} from "../api/membership.api"
-import type { MembershipPlan, MembershipSubscription } from "../types/membership.types"
+  getMembershipPlans,
+  getUserSubscription,
+  saveUserSubscription
+} from "../services/membership.service"
+import type { MembershipPlan, MembershipSubscription } from "@/workspace/membership/types/membership.types.ts"
 
 export const useMembershipStore = defineStore("membership", {
   state: () => ({
@@ -24,8 +24,8 @@ export const useMembershipStore = defineStore("membership", {
         this.error = null
 
         const [plans, subscription] = await Promise.all([
-          fetchMembershipPlans(),
-          fetchUserSubscription(userId),
+          getMembershipPlans(),
+          getUserSubscription(userId),
         ])
 
         this.plans = plans
@@ -43,7 +43,7 @@ export const useMembershipStore = defineStore("membership", {
         this.loading = true
         this.error = null
 
-        const sub = await updateUserSubscription(userId, planId)
+        const sub = await saveUserSubscription(userId, planId)
         this.subscription = sub
       } catch (err: any) {
         this.error = err.message

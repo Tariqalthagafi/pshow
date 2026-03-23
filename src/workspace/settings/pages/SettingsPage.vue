@@ -5,5 +5,5 @@
 </template>
 
 <script setup>
-import AccountSection from "../components/AccountSection.vue"
+import AccountSection from "../components/accountsection.vue"
 </script>

@@ -8,9 +8,13 @@ export function useAffiliateCore() {
 
   const isLoggedIn = computed(() => !!user.value)
 
-  const isAffiliateReady = computed(() => {
-    return affiliateStore.initialized && !!affiliateStore.affiliateProfile
-  })
+const isAffiliateReady = computed(() => {
+  // مؤقتًا ما نستخدم affiliateProfile
+  // return affiliateStore.initialized && !!affiliateStore.affiliateProfile
+
+  return affiliateStore.initialized
+})
+
 
   const loading = computed(() => {
     return userLoading.value || affiliateStore.loading

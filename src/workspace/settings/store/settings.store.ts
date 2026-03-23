@@ -1,9 +1,9 @@
 import { defineStore } from "pinia"
 import {
-  fetchUserSettings,
-  updateUserSettings
-} from "../api/settings.api"
-import type { UserSettings } from "../types/settings.types"
+  getUserSettings,
+  saveUserSettings
+} from "../services/settings.service"
+import type { UserSettings } from "@/workspace/settings/types/settings.types.ts"
 
 export const useSettingsStore = defineStore("settings", {
   state: () => ({
@@ -21,7 +21,7 @@ export const useSettingsStore = defineStore("settings", {
         this.loading = true
         this.error = null
 
-        this.settings = await fetchUserSettings(userId)
+        this.settings = await getUserSettings(userId)
         this.initialized = true
       } catch (err: any) {
         this.error = err.message
@@ -35,7 +35,7 @@ export const useSettingsStore = defineStore("settings", {
         this.loading = true
         this.error = null
 
-        const updated = await updateUserSettings(userId, payload)
+        const updated = await saveUserSettings(userId, payload)
         this.settings = updated
       } catch (err: any) {
         this.error = err.message

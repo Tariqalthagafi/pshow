@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
-import { fetchDesignTasks, fetchDesignTaskById } from "../api/designTasks.api"
-import type { DesignTask } from "../types/designTask.types"
+// import { fetchDesignTasks, fetchDesignTaskById } from "../api/designTasks.api"
+import type { DesignTask } from "@/workspace/design-tasks/types/designTask.types"
 
 export const useDesignTasksStore = defineStore("designTasks", {
   state: () => ({
@@ -19,7 +19,7 @@ export const useDesignTasksStore = defineStore("designTasks", {
         this.loading = true
         this.error = null
 
-        this.tasks = await fetchDesignTasks(designerId)
+        // this.tasks = await fetchDesignTasks(designerId)
         this.initialized = true
       } catch (err: any) {
         this.error = err.message
@@ -33,7 +33,7 @@ export const useDesignTasksStore = defineStore("designTasks", {
         this.loading = true
         this.error = null
 
-        this.selectedTask = await fetchDesignTaskById(taskId)
+       //  this.selectedTask = await fetchDesignTaskById(taskId)
       } catch (err: any) {
         this.error = err.message
       } finally {
@@ -42,7 +42,8 @@ export const useDesignTasksStore = defineStore("designTasks", {
     },
 
     updateTaskFromRealtime(payload: any) {
-      const index = this.tasks.findIndex(t => t.id === payload.new.id)
+      const index = this.tasks.findIndex((t: DesignTask) => t.id === payload.new.id)
+
       if (index !== -1) {
         this.tasks[index] = payload.new
       } else {
