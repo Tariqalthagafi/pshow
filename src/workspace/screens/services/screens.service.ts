@@ -131,3 +131,53 @@ export async function updateOfferResolution(offerId: number, resolution: string 
     .update({ resolution })
     .eq("id", offerId)
 }
+
+/* إنشاء شاشة واحدة فقط حسب الباقة */
+export async function createSingleScreen(userId: string) {
+  // 1) جلب الباقة
+  const plan = await getMembership(userId)
+
+  // 2) تحديد الحد حسب الباقة
+  const maxScreens = plan === "free" ? 1 : 5
+
+  // 3) جلب عدد الشاشات الحالية
+  const { data: existingScreens } = await supabase
+    .from("screens")
+    .select("id")
+    .eq("user_id", userId)
+
+  const currentCount = existingScreens?.length || 0
+
+  // 4) منع تجاوز الحد
+  if (currentCount >= maxScreens) {
+    return {
+      error: `لا يمكنك إضافة أكثر من ${maxScreens} شاشات حسب الباقة الحالية`
+    }
+  }
+
+  // 5) إنشاء شاشة جديدة
+  const payload = {
+    user_id: userId,
+    number: currentCount + 1,
+    is_active: false,
+    offer_id: null,
+    screen_id: Math.floor(Math.random() * 9000 + 1000),
+    activation_code: Math.floor(Math.random() * 9000 + 1000)
+  }
+
+  const { data, error } = await supabase
+    .from("screens")
+    .insert(payload)
+    .select()
+    .single()
+
+  if (error) return { error }
+
+  return {
+    data: {
+      ...data,
+      id: Number(data.id),
+      user_id: data.user_id ?? ""
+    }
+  }
+}
