@@ -7,11 +7,11 @@
       <button class="popup-btn" @click="emitImage">
         عرض صور
       </button>
-
+<!-- 
       <button class="popup-btn" @click="emitVideo">
         عرض فيديو
       </button>
-
+-->
       <button class="close-btn" @click="emitClose">
         إغلاق
       </button>
