@@ -4,7 +4,7 @@ export async function loginWithGoogle() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "https://displix.app/offers"   // ← الصفحة الرئيسية فقط
+      redirectTo: "https://www.displix.app/offers"   // ← الصفحة الرئيسية فقط
     }
   })
 
